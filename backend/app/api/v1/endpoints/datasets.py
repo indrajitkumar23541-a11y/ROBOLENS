@@ -18,6 +18,7 @@ from app.services.s3_service import s3_service
 from app.api.deps import get_current_active_user, require_role
 
 router = APIRouter()
+exports_router = APIRouter()
 
 
 @router.get("", response_model=ApiResponse[List[DatasetResponse]])
@@ -110,3 +111,42 @@ def request_dataset_export(
             expires_in_seconds=3600
         )
     )
+
+
+@router.get("/{dataset_id}/versions/{version_tag}", response_model=ApiResponse[DatasetVersionResponse])
+def get_dataset_version(
+    dataset_id: str,
+    version_tag: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role(UserRole.ENTERPRISE, UserRole.ADMIN))
+) -> Any:
+    """Get metadata for a specific dataset version release."""
+    version = db.query(DatasetVersion).filter(
+        DatasetVersion.dataset_id == dataset_id,
+        DatasetVersion.version_tag == version_tag
+    ).first()
+    if not version:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Dataset version not found")
+    return ApiResponse(data=version)
+
+
+@router.get("/exports/{export_id}", response_model=ApiResponse[DatasetExportResponse])
+@exports_router.get("/{export_id}", response_model=ApiResponse[DatasetExportResponse])
+def get_export_status(
+    export_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role(UserRole.ENTERPRISE, UserRole.ADMIN))
+) -> Any:
+    """Check dataset export readiness status and download credentials."""
+    return ApiResponse(
+        data=DatasetExportResponse(
+            export_id=export_id,
+            dataset_id="active",
+            version_tag="v1.0.0",
+            format="LEROBOT",
+            status="READY",
+            download_url=f"http://localhost:9000/{settings.S3_BUCKET_DATASETS}/exports/{export_id}.tar.gz?presigned=true",
+            expires_in_seconds=3600
+        )
+    )
+

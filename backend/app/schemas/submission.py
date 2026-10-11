@@ -74,3 +74,17 @@ class SubmissionList(BaseModel):
     total: int
     page: int
     size: int
+
+
+class SubmissionProcessingStatus(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    submission_id: str
+    episode_id: str
+    status: SubmissionStatus
+    current_stage: str
+    annotations_count: int
+    quality_checks_passed: bool
+    rejection_reason: Optional[str] = None
+    updated_at: datetime
+

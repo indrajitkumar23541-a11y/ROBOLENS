@@ -9,10 +9,15 @@ from app.models.task import Task, TaskStatus
 from app.models.submission import Submission, SubmissionStatus, MediaAsset, AssetType, AssetStatus
 from app.models.consent import Consent
 from app.models.user import User, UserRole
+from app.models.annotation import Annotation
+from app.models.review import QualityReview
 from app.schemas.submission import (
     SubmissionCreate,
     SubmissionResponse,
-    SubmissionList
+    SubmissionList,
+    SubmissionProcessingStatus,
+    AnnotationResponse,
+    QualityReviewResponse
 )
 from app.schemas.upload import (
     UploadSessionCreate,
@@ -25,6 +30,7 @@ from app.services.s3_service import s3_service
 from app.api.deps import get_current_active_user
 
 router = APIRouter()
+uploads_router = APIRouter()
 
 
 @router.post("", response_model=ApiResponse[SubmissionResponse], status_code=status.HTTP_201_CREATED)
@@ -179,6 +185,7 @@ def create_upload_session(
 
 
 @router.post("/uploads/{upload_id}/complete", response_model=ApiResponse[SubmissionResponse])
+@uploads_router.post("/{upload_id}/complete", response_model=ApiResponse[SubmissionResponse])
 def complete_upload(
     upload_id: str,
     complete_in: UploadCompleteRequest,
@@ -243,3 +250,113 @@ def cancel_submission(
     db.commit()
     db.refresh(submission)
     return ApiResponse(data=submission)
+
+
+@router.get("/uploads/{upload_id}", response_model=ApiResponse[UploadStatusResponse])
+@uploads_router.get("/{upload_id}", response_model=ApiResponse[UploadStatusResponse])
+def get_upload_status(
+    upload_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
+) -> Any:
+    """Check status, verified size, and storage key of an upload session."""
+    media_asset = db.query(MediaAsset).filter(MediaAsset.upload_session_id == upload_id).first()
+    if not media_asset:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Upload session not found")
+    
+    submission = db.query(Submission).filter(Submission.id == media_asset.submission_id).first()
+    if submission and submission.user_id != current_user.id and current_user.role != UserRole.ADMIN:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
+
+    return ApiResponse(
+        data=UploadStatusResponse(
+            upload_id=upload_id,
+            submission_id=media_asset.submission_id,
+            status=media_asset.status,
+            file_size_bytes=media_asset.file_size_bytes,
+            s3_key=media_asset.s3_key
+        )
+    )
+
+
+@router.get("/{submission_id}/processing", response_model=ApiResponse[SubmissionProcessingStatus])
+def get_submission_processing_status(
+    submission_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
+) -> Any:
+    """Get durable asynchronous processing state, stage, and annotation counts."""
+    submission = db.query(Submission).filter(Submission.id == submission_id).first()
+    if not submission:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Submission not found")
+    
+    if submission.user_id != current_user.id and current_user.role != UserRole.ADMIN:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
+
+    # Map status to processing stage
+    stage_map = {
+        SubmissionStatus.DRAFT: "RECEIVE_VERIFY",
+        SubmissionStatus.UPLOADING: "RECEIVE_VERIFY",
+        SubmissionStatus.PROCESSING: "AI_ANALYSIS",
+        SubmissionStatus.IN_REVIEW: "HUMAN_REVIEW",
+        SubmissionStatus.APPROVED: "BUILD_DATASET",
+        SubmissionStatus.REJECTED: "HUMAN_REVIEW",
+        SubmissionStatus.FAILED: "VALIDATION_FAILED",
+        SubmissionStatus.CANCELLED: "CANCELLED"
+    }
+    current_stage = stage_map.get(submission.status, "PREPROCESS")
+
+    annotations_count = db.query(Annotation).filter(Annotation.submission_id == submission.id).count()
+
+    return ApiResponse(
+        data=SubmissionProcessingStatus(
+            submission_id=submission.id,
+            episode_id=submission.episode_id,
+            status=submission.status,
+            current_stage=current_stage,
+            annotations_count=annotations_count,
+            quality_checks_passed=(submission.status in [SubmissionStatus.IN_REVIEW, SubmissionStatus.APPROVED]),
+            rejection_reason=submission.rejection_reason,
+            updated_at=submission.updated_at
+        )
+    )
+
+
+@router.get("/{submission_id}/reviews", response_model=ApiResponse[List[QualityReviewResponse]])
+def get_submission_reviews(
+    submission_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
+) -> Any:
+    """View permitted review decisions and feedback notes for a submission."""
+    submission = db.query(Submission).filter(Submission.id == submission_id).first()
+    if not submission:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Submission not found")
+
+    if submission.user_id != current_user.id and current_user.role not in [UserRole.REVIEWER, UserRole.ADMIN]:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
+
+    reviews = db.query(QualityReview).filter(QualityReview.submission_id == submission_id).all()
+    return ApiResponse(data=reviews)
+
+
+@router.get("/{submission_id}/annotations", response_model=ApiResponse[List[AnnotationResponse]])
+def get_submission_annotations(
+    submission_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
+) -> Any:
+    """View all AI and human-verified annotations for a submission."""
+    submission = db.query(Submission).filter(Submission.id == submission_id).first()
+    if not submission:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Submission not found")
+
+    if submission.user_id != current_user.id and current_user.role not in [UserRole.REVIEWER, UserRole.ADMIN]:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
+
+    annotations = db.query(Annotation).filter(
+        Annotation.submission_id == submission_id
+    ).order_by(Annotation.start_time_ms.asc()).all()
+    return ApiResponse(data=annotations)
+
+

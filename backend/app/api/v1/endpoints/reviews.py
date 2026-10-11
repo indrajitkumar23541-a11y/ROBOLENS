@@ -138,3 +138,22 @@ def submit_quality_decision(
     db.commit()
     db.refresh(review)
     return ApiResponse(data=review)
+
+
+@router.get("/submissions/{submission_id}/reviews", response_model=ApiResponse[List[QualityReviewResponse]])
+def get_submission_reviews(
+    submission_id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
+) -> Any:
+    """View permitted review decisions and feedback notes for a submission."""
+    submission = db.query(Submission).filter(Submission.id == submission_id).first()
+    if not submission:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Submission not found")
+
+    if submission.user_id != current_user.id and current_user.role not in [UserRole.REVIEWER, UserRole.ADMIN]:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
+
+    reviews = db.query(QualityReview).filter(QualityReview.submission_id == submission_id).all()
+    return ApiResponse(data=reviews)
+

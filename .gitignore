@@ -74,3 +74,7 @@ mobile/.packages
 mobile/build/
 mobile/.pub-cache/
 mobile/.pub/
+.gradle/
+**/android/.gradle/
+**/ios/Pods/
+**/ios/.symlinks/

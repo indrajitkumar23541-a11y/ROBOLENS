@@ -1,6 +1,6 @@
 from typing import Optional
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from app.models.submission import AssetStatus
 
 
@@ -12,6 +12,8 @@ class UploadSessionCreate(BaseModel):
 
 
 class UploadSessionResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     upload_id: str
     submission_id: str
     upload_url: str
@@ -26,7 +28,10 @@ class UploadCompleteRequest(BaseModel):
 
 
 class UploadStatusResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     upload_id: str
+    submission_id: str
     status: AssetStatus
     file_size_bytes: int
     s3_key: str
