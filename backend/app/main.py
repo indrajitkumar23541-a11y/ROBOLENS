@@ -85,17 +85,55 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     )
 
 
+import os
+from fastapi.responses import HTMLResponse, Response
+
 # Include API v1 Router
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 
+@app.get("/assets/{filename}", tags=["Assets"])
+def get_asset(filename: str):
+    """Serve static branding and logo assets."""
+    assets_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "assets"))
+    file_path = os.path.join(assets_dir, filename)
+    if os.path.exists(file_path):
+        media_type = "image/png" if filename.endswith(".png") else "image/svg+xml"
+        with open(file_path, "rb") as f:
+            return Response(content=f.read(), media_type=media_type)
+    return Response(status_code=404)
+
+
+@app.get("/workbench", response_class=HTMLResponse, tags=["Workbench"])
+def workbench():
+    """ROBOLENS Physical AI Developer Console and Mobile Workbench UI."""
+    template_path = os.path.join(os.path.dirname(__file__), "templates", "index.html")
+    if os.path.exists(template_path):
+        with open(template_path, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return HTMLResponse("<h1>ROBOLENS — Every Action Teaches AI</h1>")
+
+
 @app.get("/", tags=["Root"])
-def root():
+def root(request: Request):
+    """
+    ROBOLENS Gateway:
+    Returns product metadata JSON for API consumers,
+    or renders the Workbench UI for standard web browsers.
+    """
+    accept = request.headers.get("accept", "")
+    if "text/html" in accept and "application/json" not in accept:
+        template_path = os.path.join(os.path.dirname(__file__), "templates", "index.html")
+        if os.path.exists(template_path):
+            with open(template_path, "r", encoding="utf-8") as f:
+                return HTMLResponse(content=f.read())
+
     return {
         "product": "ROBOLENS",
         "tagline": "Every Action Teaches AI.",
         "version": settings.VERSION,
-        "docs": f"{settings.API_V1_STR}/docs"
+        "docs": f"{settings.API_V1_STR}/docs",
+        "workbench": "/workbench"
     }
 
 

@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROBOLENS — Physical AI & Robotics Data Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #06080D;
+      --bg-surface: #0E131F;
+      --bg-card: rgba(18, 24, 38, 0.7);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(0, 242, 254, 0.3);
+      --primary: #00F2FE;
+      --primary-gradient: linear-gradient(135deg, #00F2FE 0%, #4FACFE 100%);
+      --accent-purple: #7928CA;
+      --accent-cyan: #00F2FE;
+      --accent-green: #10B981;
+      --accent-amber: #F59E0B;
+      --accent-rose: #F43F5E;
+      --text-main: #F3F4F6;
+      --text-muted: #9CA3AF;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.07) 0%, transparent 40%),
+        radial-gradient(circle at 85% 20%, rgba(121, 40, 202, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 50% 85%, rgba(79, 172, 254, 0.05) 0%, transparent 50%);
+    }
+
+    /* Top Navigation Bar */
+    header {
+      background: rgba(10, 14, 23, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-logo {
+      height: 42px;
+      width: 42px;
+      border-radius: 10px;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 3px;
+      border: 1px solid rgba(0, 242, 254, 0.2);
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+    }
+
+    .brand-text h1 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-text p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .system-pills {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 8px var(--accent-green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.9); }
+    }
+
+    .action-links {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: none;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: var(--primary-gradient);
+      color: #06080D;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 420px 1fr 380px;
+      gap: 24px;
+    }
+
+    @media (max-width: 1400px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 12px;
+    }
+
+    .panel-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Phone Mockup */
+    .phone-container {
+      width: 100%;
+      height: 680px;
+      background: #090B10;
+      border-radius: 36px;
+      border: 3px solid #222938;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 242, 254, 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .phone-notch {
+      width: 140px;
+      height: 20px;
+      background: #222938;
+      border-radius: 0 0 14px 14px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 10;
+    }
+
+    .phone-screen {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .phone-screen::-webkit-scrollbar {
+      width: 4px;
+    }
+    .phone-screen::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    .mobile-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .mobile-header h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .task-card-mini {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      padding: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .task-card-mini:hover {
+      background: rgba(0, 242, 254, 0.05);
+      border-color: rgba(0, 242, 254, 0.3);
+      transform: translateY(-2px);
+    }
+    .task-card-mini.active {
+      border-color: var(--primary);
+      background: rgba(0, 242, 254, 0.08);
+    }
+
+    .task-card-mini h4 {
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+
+    .task-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .reward-badge {
+      color: var(--primary);
+      font-weight: 700;
+      background: rgba(0, 242, 254, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* Live Camera Simulation Screen */
+    .camera-hud {
+      position: relative;
+      background: #000;
+      height: 220px;
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .camera-feed {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hud-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 10px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.7) 100%);
+    }
+
+    .hud-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .rec-indicator {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(244, 63, 94, 0.3);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #F43F5E;
+    }
+
+    .bounding-box {
+      position: absolute;
+      border: 2px solid var(--primary);
+      border-radius: 6px;
+      background: rgba(0, 242, 254, 0.1);
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
+      display: flex;
+      align-items: flex-start;
+      padding: 2px 4px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--primary);
+      font-family: var(--font-mono);
+      animation: floatBox 4s infinite alternate ease-in-out;
+    }
+
+    @keyframes floatBox {
+      0% { top: 25%; left: 30%; width: 110px; height: 95px; }
+      100% { top: 32%; left: 38%; width: 105px; height: 90px; }
+    }
+
+    /* Middle Column: Pipeline & Tasks */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .stat-val {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      margin-top: 4px;
+    }
+
+    .stat-lbl {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    /* Pipeline Flow */
+    .pipeline-flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      padding: 14px;
+      border: 1px solid var(--border-subtle);
+      gap: 6px;
+      overflow-x: auto;
+    }
+
+    .pipe-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-align: center;
+      min-width: 80px;
+    }
+
+    .pipe-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(0, 242, 254, 0.1);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .pipe-arrow {
+      color: rgba(255, 255, 255, 0.2);
+      font-size: 0.8rem;
+    }
+
+    .pipe-text {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Data Tables */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-muted);
+      padding: 10px 14px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+    }
+
+    .status-active, .status-approved {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10B981;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .status-in_review, .status-processing {
+      background: rgba(245, 158, 11, 0.15);
+      color: #F59E0B;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .status-draft {
+      background: rgba(156, 163, 175, 0.15);
+      color: #9CA3AF;
+      border: 1px solid rgba(156, 163, 175, 0.3);
+    }
+
+    /* Right Column: Review & Dataset */
+    .dataset-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .dataset-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dataset-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .export-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-export {
+      padding: 7px 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 6px;
+      background: rgba(0, 242, 254, 0.08);
+      color: var(--primary);
+      border: 1px solid rgba(0, 242, 254, 0.2);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-export:hover {
+      background: var(--primary);
+      color: #06080D;
+    }
+
+    /* Log Box */
+    .log-terminal {
+      background: #000;
+      border-radius: 10px;
+      padding: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: #10B981;
+      height: 140px;
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      white-space: pre-wrap;
+    }
+
+    .log-line {
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="brand-group">
+      <img src="/assets/logo.png" alt="ROBOLENS Logo" class="brand-logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\' fill=\'%2300F2FE\'><polygon points=\'50 15, 85 80, 15 80\'/></svg>'">
+      <div class="brand-text">
+        <h1>ROBOLENS</h1>
+        <p>Every Action Teaches AI — Workbench</p>
+      </div>
+    </div>
+
+    <div class="system-pills">
+      <div class="pill">
+        <span class="pill-dot"></span>
+        FastAPI v1.0.0
+      </div>
+      <div class="pill">
+        <span class="pill-dot" style="background:#00F2FE; box-shadow: 0 0 8px #00F2FE;"></span>
+        PostgreSQL / SQLite
+      </div>
+      <div class="pill">
+        <span class="pill-dot" style="background:#7928CA; box-shadow: 0 0 8px #7928CA;"></span>
+        MinIO S3 Ready
+      </div>
+      <div class="pill">
+        <span class="pill-dot" style="background:#F59E0B; box-shadow: 0 0 8px #F59E0B;"></span>
+        AI Worker Online
+      </div>
+    </div>
+
+    <div class="action-links">
+      <a href="/api/v1/docs" target="_blank" class="btn btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        Swagger Docs
+      </a>
+      <a href="/api/v1/redoc" target="_blank" class="btn btn-secondary">ReDoc</a>
+      <a href="https://github.com/indrajitkumar23541-a11y/ROBOLENS" target="_blank" class="btn btn-secondary">GitHub</a>
+    </div>
+  </header>
+
+  <!-- Main Grid -->
+  <main>
+
+    <!-- Column 1: Contributor Mobile Simulator -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+          Contributor Mobile App Simulator
+        </div>
+        <span class="status-badge status-active">iOS / Android</span>
+      </div>
+
+      <div class="phone-container">
+        <div class="phone-notch"></div>
+        <div class="phone-screen" id="mobileScreen">
+
+          <div class="mobile-header">
+            <h3>Explore Tasks</h3>
+            <span class="reward-badge">Earn USD</span>
+          </div>
+
+          <!-- Camera Feed Simulation -->
+          <div class="camera-hud">
+            <video id="webcamFeed" class="camera-feed" autoplay muted playsinline></video>
+            <canvas id="synthFeed" class="camera-feed" style="display:none;"></canvas>
+            
+            <div class="bounding-box">
+              <span>TARGET_OBJ: 0.94</span>
+            </div>
+
+            <div class="hud-overlay">
+              <div class="hud-top">
+                <span class="rec-indicator" id="recBadge">● LIVE 1080p</span>
+                <span style="font-size:0.7rem; font-family:var(--font-mono); color:#fff;" id="timerLabel">00:08 / 00:30</span>
+              </div>
+              <div style="font-size:0.65rem; color:#00F2FE; font-family:var(--font-mono);">
+                Trajectory: (X:0.12, Y:0.45, Z:0.78) | AI_ESTIMATE
+              </div>
+            </div>
+          </div>
+
+          <!-- Selected Task Info -->
+          <div class="task-card-mini active" id="currentTaskCard">
+            <h4 id="taskTitleDisplay">Tabletop Cup Pick & Place</h4>
+            <p style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 6px;" id="taskDescDisplay">
+              Record grasping a mug from a kitchen table and relocating it to a coaster.
+            </p>
+            <div class="task-meta">
+              <span>Duration: 8s - 30s</span>
+              <span class="reward-badge">$12.50 USD</span>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <button class="btn btn-primary" style="justify-content:center; width:100%;" id="btnRecordUpload" onclick="simulateMobileRecordingFlow()">
+              ⚡ Simulate Record & Direct S3 Upload
+            </button>
+            <div style="font-size:0.68rem; color:var(--text-muted); text-align:center;">
+              ✓ Explicit Consent Verified | Direct PUT Upload
+            </div>
+          </div>
+
+          <!-- Task Mini List -->
+          <div style="font-size: 0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-top:6px;">
+            Available Manipulation Tasks:
+          </div>
+          <div id="taskListContainer" style="display:flex; flex-direction:column; gap:8px;">
+            <!-- Dynamically populated from /api/v1/tasks -->
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Column 2: Robotics Pipeline & Submissions -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          Live Processing Engine & Submissions
+        </div>
+        <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="refreshData()">
+          ↻ Refresh
+        </button>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-lbl">Active Tasks</div>
+          <div class="stat-val" id="statTasks">5</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">Submissions</div>
+          <div class="stat-val" id="statSubmissions">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">In Review</div>
+          <div class="stat-val" id="statInReview">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">Approved Data</div>
+          <div class="stat-val" id="statApproved">0</div>
+        </div>
+      </div>
+
+      <!-- Pipeline Steps -->
+      <div class="pipeline-flow">
+        <div class="pipe-step">
+          <div class="pipe-badge">1</div>
+          <div class="pipe-text">Direct S3 PUT</div>
+        </div>
+        <div class="pipe-arrow">➔</div>
+        <div class="pipe-step">
+          <div class="pipe-badge">2</div>
+          <div class="pipe-text">OpenCV Check</div>
+        </div>
+        <div class="pipe-arrow">➔</div>
+        <div class="pipe-step">
+          <div class="pipe-badge">3</div>
+          <div class="pipe-text">AI Action Seg</div>
+        </div>
+        <div class="pipe-arrow">➔</div>
+        <div class="pipe-step">
+          <div class="pipe-badge">4</div>
+          <div class="pipe-text">Quality Gates</div>
+        </div>
+        <div class="pipe-arrow">➔</div>
+        <div class="pipe-step">
+          <div class="pipe-badge">5</div>
+          <div class="pipe-text">Human Review</div>
+        </div>
+        <div class="pipe-arrow">➔</div>
+        <div class="pipe-step">
+          <div class="pipe-badge" style="background:rgba(16,185,129,0.15); border-color:#10B981; color:#10B981;">6</div>
+          <div class="pipe-text">Dataset Release</div>
+        </div>
+      </div>
+
+      <!-- Submissions Table -->
+      <div class="panel-title" style="margin-top:6px;">
+        Real-Time Submissions Ledger
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Episode ID</th>
+              <th>Task</th>
+              <th>Status</th>
+              <th>Created</th>
+            </tr>
+          </thead>
+          <tbody id="submissionsTableBody">
+            <tr>
+              <td colspan="4" style="text-align:center; color:var(--text-muted);">
+                No submissions yet. Click "Simulate Record & Direct S3 Upload" on the phone!
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Real-Time Activity Log -->
+      <div class="panel-title" style="margin-top:6px;">
+        Orchestration Event Stream
+      </div>
+      <div class="log-terminal" id="eventTerminal">
+[SYSTEM READY] ROBOLENS platform initialized on localhost:8000
+[DB CONNECTED] PostgreSQL / SQLite fallback active
+[WORKER POOL] Autonomous Video Validation & Annotation worker listening
+      </div>
+    </div>
+
+    <!-- Column 3: Quality Review & Dataset Releases -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+          Quality Review & Datasets
+        </div>
+        <span class="status-badge status-approved">Physical AI</span>
+      </div>
+
+      <!-- Review Queue Section -->
+      <div class="panel-title">
+        Review Queue (Pending Verification)
+      </div>
+      <div id="reviewQueueContainer" style="display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:0.75rem; color:var(--text-muted); padding:10px; border:1px dashed var(--border-subtle); border-radius:8px; text-align:center;">
+          Queue empty. Submissions will appear here after video processing.
+        </div>
+      </div>
+
+      <!-- Datasets & Exports Section -->
+      <div class="panel-title" style="margin-top:10px;">
+        Physical AI Benchmark Datasets
+      </div>
+      <div id="datasetsContainer" style="display:flex; flex-direction:column; gap:12px;">
+        <!-- Dynamically loaded from /api/v1/datasets -->
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    let activeTasks = [];
+    let selectedTaskId = null;
+
+    // Log helper
+    function logEvent(msg) {
+      const term = document.getElementById('eventTerminal');
+      const time = new Date().toLocaleTimeString();
+      term.innerHTML += `\n[${time}] ${msg}`;
+      term.scrollTop = term.scrollHeight;
+    }
+
+    // Initialize Camera feed / Canvas simulation
+    async function initCamera() {
+      const video = document.getElementById('webcamFeed');
+      try {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          video.srcObject = stream;
+        } else {
+          startSyntheticFeed();
+        }
+      } catch (err) {
+        startSyntheticFeed();
+      }
+    }
+
+    function startSyntheticFeed() {
+      const video = document.getElementById('webcamFeed');
+      const canvas = document.getElementById('synthFeed');
+      video.style.display = 'none';
+      canvas.style.display = 'block';
+      const ctx = canvas.getContext('2d');
+      canvas.width = 320;
+      canvas.height = 220;
+
+      let frame = 0;
+      function draw() {
+        frame++;
+        ctx.fillStyle = '#0F1218';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw grid
+        ctx.strokeStyle = 'rgba(0, 242, 254, 0.1)';
+        for (let x = 0; x < canvas.width; x += 30) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, canvas.height);
+          ctx.stroke();
+        }
+
+        // Animated robot gripper / object
+        const xObj = 160 + Math.sin(frame * 0.03) * 40;
+        const yObj = 110 + Math.cos(frame * 0.03) * 20;
+
+        ctx.fillStyle = '#4FACFE';
+        ctx.beginPath();
+        ctx.arc(xObj, yObj, 22, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = '#00F2FE';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(xObj - 30, yObj - 30, 60, 60);
+
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    // Fetch Tasks
+    async function loadTasks() {
+      try {
+        const res = await fetch('/api/v1/tasks');
+        const json = await res.json();
+        if (json.success && json.data) {
+          activeTasks = json.data;
+          document.getElementById('statTasks').innerText = activeTasks.length;
+          renderTaskList();
+        }
+      } catch (e) {
+        console.error("Could not fetch tasks:", e);
+      }
+    }
+
+    function renderTaskList() {
+      const container = document.getElementById('taskListContainer');
+      container.innerHTML = '';
+      activeTasks.forEach((t, i) => {
+        const card = document.createElement('div');
+        card.className = `task-card-mini ${i === 0 ? 'active' : ''}`;
+        card.innerHTML = `
+          <h4>${t.title}</h4>
+          <div class="task-meta">
+            <span>${t.category}</span>
+            <span class="reward-badge">$${t.reward_amount.toFixed(2)}</span>
+          </div>
+        `;
+        card.onclick = () => selectTask(t, card);
+        container.appendChild(card);
+        if (i === 0) selectTask(t, card);
+      });
+    }
+
+    function selectTask(task, cardEl) {
+      selectedTaskId = task.id;
+      document.querySelectorAll('.task-card-mini').forEach(c => c.classList.remove('active'));
+      if (cardEl) cardEl.classList.add('active');
+      document.getElementById('taskTitleDisplay').innerText = task.title;
+      document.getElementById('taskDescDisplay').innerText = task.description;
+    }
+
+    // Simulate Contributor Submission & Direct S3 Upload
+    async function simulateMobileRecordingFlow() {
+      if (!selectedTaskId && activeTasks.length > 0) {
+        selectedTaskId = activeTasks[0].id;
+      }
+      const btn = document.getElementById('btnRecordUpload');
+      btn.disabled = true;
+      btn.innerText = "⏳ Recording & Uploading...";
+      logEvent(`[MOBILE] Starting camera recording for task: ${selectedTaskId}`);
+
+      try {
+        // Step 1: Create submission
+        const subRes = await fetch('/api/v1/submissions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            task_id: selectedTaskId,
+            consent_agreed: true,
+            policy_version: "1.0"
+          })
+        });
+        const subData = await subRes.json();
+        const submission = subData.data;
+        logEvent(`[SUBMISSION] Episode created: ${submission.episode_id} (Status: DRAFT)`);
+
+        // Step 2: Request Upload session
+        const upRes = await fetch(`/api/v1/submissions/${submission.id}/uploads`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            file_name: "robot_trajectory.mp4",
+            file_size_bytes: 14820000,
+            mime_type: "video/mp4",
+            checksum_sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          })
+        });
+        const upData = await upRes.json();
+        const upload = upData.data;
+        logEvent(`[S3 DIRECT] Presigned upload URL generated for S3 Key: ${upload.s3_key}`);
+
+        // Step 3: Complete upload
+        const compRes = await fetch(`/api/v1/submissions/uploads/${upload.upload_id}/complete`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            checksum_sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          })
+        });
+        const compData = await compRes.json();
+        logEvent(`[VERIFIED] Media validated in storage! Processing initiated (Status: PROCESSING)`);
+
+        // Update tables
+        await refreshData();
+        btn.innerText = "✓ Upload Complete!";
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.innerText = "⚡ Simulate Record & Direct S3 Upload";
+        }, 2000);
+
+      } catch (err) {
+        logEvent(`[ERROR] Flow failed: ${err.message}`);
+        btn.disabled = false;
+        btn.innerText = "⚡ Simulate Record & Direct S3 Upload";
+      }
+    }
+
+    // Refresh Submissions & Datasets
+    async function refreshData() {
+      try {
+        // Fetch submissions
+        const subRes = await fetch('/api/v1/submissions?limit=10');
+        const subJson = await subRes.json();
+        const tbody = document.getElementById('submissionsTableBody');
+
+        if (subJson.success && subJson.data && subJson.data.items) {
+          const items = subJson.data.items;
+          document.getElementById('statSubmissions').innerText = subJson.data.total;
+          
+          let approved = 0;
+          let inReview = 0;
+          tbody.innerHTML = '';
+
+          items.forEach(s => {
+            if (s.status === 'APPROVED') approved++;
+            if (s.status === 'IN_REVIEW' || s.status === 'PROCESSING') inReview++;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td style="font-family:var(--font-mono); font-weight:600; color:var(--primary);">${s.episode_id.slice(0, 8)}...</td>
+              <td>${s.task_id.slice(0, 15)}...</td>
+              <td><span class="status-badge status-${s.status.toLowerCase()}">${s.status}</span></td>
+              <td style="color:var(--text-muted); font-size:0.75rem;">${new Date(s.created_at).toLocaleTimeString()}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+
+          document.getElementById('statApproved').innerText = approved;
+          document.getElementById('statInReview').innerText = inReview;
+        }
+
+        // Fetch Review Queue
+        loadReviewQueue();
+
+        // Fetch Datasets
+        loadDatasets();
+
+      } catch (e) {
+        console.error("Refresh error:", e);
+      }
+    }
+
+    async function loadReviewQueue() {
+      const qRes = await fetch('/api/v1/reviews/queue');
+      const qJson = await qRes.json();
+      const container = document.getElementById('reviewQueueContainer');
+
+      if (qJson.success && qJson.data && qJson.data.length > 0) {
+        container.innerHTML = '';
+        qJson.data.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'task-card-mini';
+          div.innerHTML = `
+            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+              <span style="font-weight:700; color:#fff;">Episode: ${item.episode_id.slice(0,8)}</span>
+              <span class="status-badge status-in_review">${item.status}</span>
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">
+              Task: ${item.task_title}
+            </div>
+            <div style="display:flex; gap:6px;">
+              <button class="btn btn-primary" style="padding:4px 10px; font-size:0.7rem;" onclick="approveSubmission('${item.submission_id}')">
+                ✓ Approve
+              </button>
+              <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.7rem; color:#F43F5E;" onclick="rejectSubmission('${item.submission_id}')">
+                ✗ Reject
+              </button>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      } else {
+        container.innerHTML = `<div style="font-size:0.75rem; color:var(--text-muted); padding:10px; border:1px dashed var(--border-subtle); border-radius:8px; text-align:center;">
+          Queue empty. Submissions will appear here after video processing.
+        </div>`;
+      }
+    }
+
+    async function approveSubmission(id) {
+      logEvent(`[REVIEW] Approving submission ${id}...`);
+      await fetch(`/api/v1/reviews/submissions/${id}/reviews`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ decision: 'APPROVED', feedback_notes: 'Verified via ROBOLENS Workbench' })
+      });
+      logEvent(`[REVIEW] Submission ${id} APPROVED and added to dataset pool.`);
+      refreshData();
+    }
+
+    async function rejectSubmission(id) {
+      logEvent(`[REVIEW] Rejecting submission ${id}...`);
+      await fetch(`/api/v1/reviews/submissions/${id}/reviews`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ decision: 'REJECTED', rejection_reason: 'Unusable camera angle or blurry frame' })
+      });
+      logEvent(`[REVIEW] Submission ${id} REJECTED.`);
+      refreshData();
+    }
+
+    async function loadDatasets() {
+      const dRes = await fetch('/api/v1/datasets');
+      const dJson = await dRes.json();
+      const container = document.getElementById('datasetsContainer');
+
+      if (dJson.success && dJson.data && dJson.data.length > 0) {
+        container.innerHTML = '';
+        dJson.data.forEach(d => {
+          const div = document.createElement('div');
+          div.className = 'dataset-card';
+          div.innerHTML = `
+            <div class="dataset-header">
+              <span class="dataset-name">${d.name}</span>
+              <span class="reward-badge">${d.license}</span>
+            </div>
+            <p style="font-size:0.75rem; color:var(--text-muted);">${d.description}</p>
+            <div class="export-buttons">
+              <a href="javascript:void(0)" onclick="exportDataset('${d.id}', 'LEROBOT')" class="btn-export">
+                📦 Hugging Face LeRobot
+              </a>
+              <a href="javascript:void(0)" onclick="exportDataset('${d.id}', 'RLDS')" class="btn-export">
+                🤖 TFDS / RLDS
+              </a>
+              <a href="javascript:void(0)" onclick="exportDataset('${d.id}', 'JSON_MANIFEST')" class="btn-export" style="grid-column: span 2;">
+                📄 Download JSON Provenance Manifest
+              </a>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      }
+    }
+
+    async function exportDataset(id, format) {
+      logEvent(`[EXPORT] Requesting ${format} export for dataset ${id}...`);
+      const res = await fetch(`/api/v1/datasets/${id}/exports`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ format: format })
+      });
+      const json = await res.json();
+      if (json.success && json.data) {
+        logEvent(`[EXPORT READY] ${format} generated! Download URL: ${json.data.download_url}`);
+        window.open(json.data.download_url, '_blank');
+      } else {
+        logEvent(`[EXPORT ERROR] Failed to generate export.`);
+      }
+    }
+
+    // Startup
+    window.addEventListener('DOMContentLoaded', () => {
+      initCamera();
+      loadTasks();
+      refreshData();
+    });
+  </script>
+</body>
+</html>
