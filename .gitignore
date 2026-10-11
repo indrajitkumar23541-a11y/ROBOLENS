@@ -45,6 +45,7 @@ venv.bak/
 # Database & Storage
 *.sqlite3
 *.db
+scratch/
 minio-data/
 postgres-data/
 
