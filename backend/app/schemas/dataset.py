@@ -1,10 +1,12 @@
 from typing import Optional, List
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from app.models.dataset import DatasetVersionStatus
 
 
 class DatasetResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     name: str
     slug: str
@@ -12,20 +14,16 @@ class DatasetResponse(BaseModel):
     license: str
     created_at: datetime
 
-    class Config:
-        from_attributes = True
-
 
 class DatasetVersionResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     dataset_id: str
     version_tag: str
     status: DatasetVersionStatus
     total_episodes: int
     created_at: datetime
-
-    class Config:
-        from_attributes = True
 
 
 class DatasetExportRequest(BaseModel):

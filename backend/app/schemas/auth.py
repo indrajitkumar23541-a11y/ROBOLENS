@@ -1,6 +1,6 @@
 from typing import Optional
 from datetime import datetime
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 from app.models.user import UserRole
 
 
@@ -27,15 +27,14 @@ class TokenRefresh(BaseModel):
 
 
 class UserProfile(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     email: str
     full_name: Optional[str] = None
     role: UserRole
     is_active: bool
     created_at: datetime
-
-    class Config:
-        from_attributes = True
 
 
 class UserUpdate(BaseModel):

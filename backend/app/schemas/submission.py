@@ -1,12 +1,14 @@
 from typing import Optional, List
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from app.models.submission import SubmissionStatus, AssetType, AssetStatus
 from app.models.annotation import AnnotationSource
 from app.models.review import ReviewDecision
 
 
 class MediaAssetResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     asset_type: AssetType
     file_size_bytes: int
@@ -18,11 +20,10 @@ class MediaAssetResponse(BaseModel):
     status: AssetStatus
     created_at: datetime
 
-    class Config:
-        from_attributes = True
-
 
 class AnnotationResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     label: str
     start_time_ms: int
@@ -34,19 +35,15 @@ class AnnotationResponse(BaseModel):
     revision: int
     created_at: datetime
 
-    class Config:
-        from_attributes = True
-
 
 class QualityReviewResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     decision: ReviewDecision
     rejection_reason: Optional[str] = None
     feedback_notes: Optional[str] = None
     created_at: datetime
-
-    class Config:
-        from_attributes = True
 
 
 class SubmissionCreate(BaseModel):
@@ -56,6 +53,8 @@ class SubmissionCreate(BaseModel):
 
 
 class SubmissionResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     task_id: str
     user_id: str
@@ -68,9 +67,6 @@ class SubmissionResponse(BaseModel):
     media_assets: List[MediaAssetResponse] = []
     annotations: List[AnnotationResponse] = []
     quality_reviews: List[QualityReviewResponse] = []
-
-    class Config:
-        from_attributes = True
 
 
 class SubmissionList(BaseModel):

@@ -56,6 +56,9 @@ def list_dataset_versions(
     return ApiResponse(data=versions)
 
 
+from app.services.dataset_export_service import dataset_export_service
+
+
 @router.post("/{dataset_id}/exports", response_model=ApiResponse[DatasetExportResponse])
 def request_dataset_export(
     dataset_id: str,
@@ -65,7 +68,7 @@ def request_dataset_export(
 ) -> Any:
     """
     Request an authorized export of an approved dataset version.
-    Generates a secure, short-lived download link.
+    Generates a secure, short-lived download link for LeRobot, RLDS, or JSON manifest.
     """
     dataset = db.query(Dataset).filter(Dataset.id == dataset_id).first()
     if not dataset:
@@ -80,7 +83,12 @@ def request_dataset_export(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No published version available for this dataset")
 
     export_id = str(uuid.uuid4())
-    s3_key = latest_version.manifest_s3_key or f"datasets/{dataset.slug}/{latest_version.version_tag}/export.tar.gz"
+    s3_key = dataset_export_service.build_export_archive(
+        db=db,
+        dataset=dataset,
+        version=latest_version,
+        format_type=export_in.format
+    )
 
     try:
         download_url = s3_service.generate_presigned_download_url(

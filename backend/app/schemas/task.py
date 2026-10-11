@@ -1,6 +1,6 @@
 from typing import Optional, List
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from app.models.task import TaskStatus
 
 
@@ -20,6 +20,8 @@ class TaskCreate(TaskBase):
 
 
 class TaskResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     title: str
     description: str
@@ -30,9 +32,6 @@ class TaskResponse(BaseModel):
     status: TaskStatus
     version: int
     created_at: datetime
-
-    class Config:
-        from_attributes = True
 
 
 class TaskDetail(TaskResponse):

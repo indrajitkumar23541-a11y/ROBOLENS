@@ -1,6 +1,6 @@
 from typing import Optional, List
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from app.models.review import ReviewDecision
 from app.models.annotation import AnnotationSource
 
@@ -19,6 +19,8 @@ class ReviewSubmitRequest(BaseModel):
 
 
 class ReviewQueueItem(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     submission_id: str
     episode_id: str
     task_id: str
@@ -27,6 +29,3 @@ class ReviewQueueItem(BaseModel):
     status: str
     created_at: datetime
     annotation_count: int
-
-    class Config:
-        from_attributes = True
