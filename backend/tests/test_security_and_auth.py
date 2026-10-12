@@ -94,7 +94,23 @@ def test_consent_enforcement_on_submission(client, contributor_token):
     db = SessionLocal()
     try:
         task = db.query(Task).filter(Task.status == TaskStatus.ACTIVE).first()
-        assert task is not None
+        if not task:
+            task = Task(
+                id="task_seed_security",
+                title="Seed Security Test Task",
+                description="Seed task for security and consent verification",
+                instructions_md="Follow prompt instructions",
+                category="tabletop_manipulation",
+                expected_duration_min=5,
+                expected_duration_max=60,
+                reward_amount=10.0,
+                status=TaskStatus.ACTIVE,
+                version=1,
+                max_submissions=100
+            )
+            db.add(task)
+            db.commit()
+            db.refresh(task)
 
         # Attempt submission with consent_agreed = False
         payload = {
@@ -118,7 +134,23 @@ def test_task_eligibility_and_processing_endpoints(client, contributor_token):
     db = SessionLocal()
     try:
         task = db.query(Task).filter(Task.status == TaskStatus.ACTIVE).first()
-        assert task is not None
+        if not task:
+            task = Task(
+                id="task_seed_eligibility",
+                title="Seed Eligibility Test Task",
+                description="Seed task for eligibility verification",
+                instructions_md="Follow prompt instructions",
+                category="tabletop_manipulation",
+                expected_duration_min=5,
+                expected_duration_max=60,
+                reward_amount=10.0,
+                status=TaskStatus.ACTIVE,
+                version=1,
+                max_submissions=100
+            )
+            db.add(task)
+            db.commit()
+            db.refresh(task)
 
         # Check eligibility
         resp = client.get(
