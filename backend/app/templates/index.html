@@ -605,6 +605,89 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
       white-space: pre-wrap;
     }
+
+    /* Mobile Broadcast Banner & QR Modal */
+    .mobile-broadcast-banner {
+      background: linear-gradient(90deg, rgba(0, 242, 254, 0.12) 0%, rgba(121, 40, 202, 0.14) 100%);
+      border-bottom: 1px solid rgba(0, 242, 254, 0.3);
+      padding: 10px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .broadcast-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+    }
+    .broadcast-icon {
+      font-size: 1.3rem;
+    }
+    .broadcast-url {
+      font-family: var(--font-mono);
+      color: var(--primary);
+      background: rgba(0, 242, 254, 0.1);
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-left: 6px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    .broadcast-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .qr-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .qr-modal-content {
+      background: var(--bg-surface);
+      border: 1px solid rgba(0, 242, 254, 0.35);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+      max-width: 360px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+    }
+
+    @media (max-width: 768px) {
+      header {
+        padding: 10px 16px;
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+      .system-pills {
+        display: none;
+      }
+      .mobile-broadcast-banner {
+        padding: 10px 16px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      main {
+        padding: 12px;
+        gap: 16px;
+      }
+      .phone-container {
+        height: auto;
+        min-height: 80vh;
+        border-radius: 20px;
+        border-width: 2px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -652,6 +735,32 @@
       <a href="https://github.com/indrajitkumar23541-a11y/ROBOLENS" target="_blank" class="btn btn-secondary">GitHub</a>
     </div>
   </header>
+
+  <!-- Mobile Phone Quick Connect Bar -->
+  <div class="mobile-broadcast-banner" id="mobileBroadcastBanner">
+    <div class="broadcast-left">
+      <span class="broadcast-icon">📱</span>
+      <div>
+        <strong style="color:#fff;">Phone Par Open Karein (Same Wi-Fi):</strong>
+        <span class="broadcast-url">http://10.83.134.3:8000/workbench</span>
+      </div>
+    </div>
+    <div class="broadcast-actions">
+      <button class="btn btn-secondary" onclick="navigator.clipboard.writeText('http://10.83.134.3:8000/workbench'); alert('Mobile Link copied! Phone me browser me paste karein: http://10.83.134.3:8000/workbench');">📋 Copy Mobile Link</button>
+      <button class="btn btn-primary" onclick="toggleMobileQrModal()">📷 Phone Camera Se Scan Karein</button>
+    </div>
+  </div>
+
+  <!-- QR Code Modal -->
+  <div id="qrModal" class="qr-modal" style="display:none;" onclick="if(event.target===this) toggleMobileQrModal()">
+    <div class="qr-modal-content">
+      <h3 style="color:#fff; font-size:1.1rem; margin-bottom:4px;">Phone Se Scan Karein</h3>
+      <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:16px;">Apne phone camera ko screen ke samne layein aur link open karein (Same Wi-Fi)</p>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=http://10.83.134.3:8000/workbench" alt="ROBOLENS Mobile QR" style="border-radius:14px; border:2px solid var(--primary); box-shadow:0 0 25px rgba(0,242,254,0.35); background:#fff; padding:8px;">
+      <div style="font-family:var(--font-mono); font-size:0.8rem; color:var(--primary); margin-top:14px; word-break:break-all;">http://10.83.134.3:8000/workbench</div>
+      <button class="btn btn-secondary" style="margin-top:16px; width:100%; justify-content:center;" onclick="toggleMobileQrModal()">Close</button>
+    </div>
+  </div>
 
   <!-- Main Grid -->
   <main>
@@ -1310,6 +1419,11 @@
       } else {
         logEvent(`[EXPORT ERROR] Failed to generate export.`);
       }
+    }
+
+    function toggleMobileQrModal() {
+      const m = document.getElementById('qrModal');
+      m.style.display = (m.style.display === 'none' || !m.style.display) ? 'flex' : 'none';
     }
 
     // Startup on Page Load

@@ -1,6 +1,8 @@
 class ApiConstants {
-  // In development, on Android emulator 10.0.2.2 points to host machine, on iOS simulator localhost
-  static const String baseUrl = "http://10.0.2.2:8000/api/v1";
+  // Physical Device (Wi-Fi): http://10.83.134.3:8000/api/v1
+  // Android Emulator: http://10.0.2.2:8000/api/v1
+  // iOS Simulator / Desktop: http://127.0.0.1:8000/api/v1
+  static const String baseUrl = "http://10.83.134.3:8000/api/v1";
 
   // Auth endpoints
   static const String register = "/auth/register";
