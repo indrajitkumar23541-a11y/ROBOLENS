@@ -118,15 +118,23 @@ def workbench():
 def root(request: Request):
     """
     ROBOLENS Gateway:
-    Returns product metadata JSON for API consumers,
-    or renders the Workbench UI for standard web browsers.
+    Returns product metadata JSON for explicit API consumers,
+    or renders the full UI for all browsers.
     """
     accept = request.headers.get("accept", "")
-    if "text/html" in accept and "application/json" not in accept:
-        template_path = os.path.join(os.path.dirname(__file__), "templates", "index.html")
-        if os.path.exists(template_path):
-            with open(template_path, "r", encoding="utf-8") as f:
-                return HTMLResponse(content=f.read())
+    if accept == "application/json" and "text/html" not in accept:
+        return {
+            "product": "ROBOLENS",
+            "tagline": "Every Action Teaches AI.",
+            "version": settings.VERSION,
+            "docs": f"{settings.API_V1_STR}/docs",
+            "workbench": "/workbench"
+        }
+
+    template_path = os.path.join(os.path.dirname(__file__), "templates", "index.html")
+    if os.path.exists(template_path):
+        with open(template_path, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
 
     return {
         "product": "ROBOLENS",

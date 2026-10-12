@@ -1117,9 +1117,9 @@
       <button class="screen-pill" onclick="switchScreen('screen-splash')">Splash Screen</button>
     </div>
 
-    <div class="wifi-pill">
+    <div class="wifi-pill" id="liveHostPill">
       <span class="wifi-dot"></span>
-      <span>Live Phone: 10.83.134.3:8000</span>
+      <span id="liveHostText">Live Phone: 172.16.4.119:8000</span>
     </div>
   </header>
 
@@ -1964,6 +1964,10 @@
 
     // Auto-load tasks from live backend
     window.addEventListener('DOMContentLoaded', async () => {
+      const hostEl = document.getElementById('liveHostText');
+      if (hostEl) {
+        hostEl.innerText = 'Live: ' + window.location.host;
+      }
       try {
         const resp = await fetch('/api/v1/health');
         const data = await resp.json();
