@@ -20,19 +20,19 @@ class RoboLensApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF0D1117),
-        primaryColor: const Color(0xFF00E5FF),
+        scaffoldBackgroundColor: const Color(0xFF070B14),
+        primaryColor: const Color(0xFF0066FF),
         colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF00E5FF),
+          primary: Color(0xFF0066FF),
           secondary: Color(0xFF00E676),
-          surface: Color(0xFF161B22),
-          background: Color(0xFF0D1117),
+          surface: Color(0xFF0E1424),
+          background: Color(0xFF070B14),
         ),
         cardTheme: CardTheme(
-          color: const Color(0xFF161B22),
+          color: const Color(0xFF131B2E),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-            side: const BorderSide(color: Color(0xFF30363D), width: 1),
+            borderRadius: BorderRadius.circular(16),
+            side: const BorderSide(color: Color(0xFF1E293B), width: 1),
           ),
         ),
         appBarTheme: const AppBarTheme(

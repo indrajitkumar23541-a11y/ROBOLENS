@@ -2,26 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ROBOLENS — Physical AI & Robotics Training Data Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>ROBOLENS — Every Action Teaches AI</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-base: #06080D;
-      --bg-surface: #0E131F;
-      --bg-card: rgba(15, 20, 32, 0.75);
+      --bg-dark: #070B14;
+      --bg-surface: #0E1424;
+      --bg-card: #131B2E;
+      --bg-card-subtle: #18223B;
       --border-subtle: rgba(255, 255, 255, 0.08);
-      --border-glow: rgba(0, 242, 254, 0.35);
-      --primary: #00F2FE;
-      --primary-gradient: linear-gradient(135deg, #00F2FE 0%, #4FACFE 100%);
-      --accent-purple: #7928CA;
-      --accent-green: #10B981;
-      --accent-amber: #F59E0B;
-      --accent-rose: #F43F5E;
-      --text-main: #F3F4F6;
-      --text-muted: #9CA3AF;
+      --border-active: #0066FF;
+      --primary: #0066FF;
+      --primary-light: #00B4D8;
+      --primary-gradient: linear-gradient(135deg, #0052D4 0%, #4364F7 50%, #6FB1FC 100%);
+      --button-gradient: linear-gradient(135deg, #0062FF 0%, #0091FF 100%);
+      --accent-green: #00E676;
+      --accent-amber: #FFB300;
+      --accent-red: #FF3D71;
+      --text-main: #FFFFFF;
+      --text-muted: #8E9BAE;
+      --text-subtle: #5A6679;
       --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
       --font-mono: 'JetBrains Mono', monospace;
     }
@@ -30,53 +33,56 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background: var(--bg-base);
+      background: var(--bg-dark);
       color: var(--text-main);
       font-family: var(--font-sans);
       min-height: 100vh;
-      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       background-image: 
-        radial-gradient(circle at 15% 15%, rgba(0, 242, 254, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 85% 20%, rgba(121, 40, 202, 0.09) 0%, transparent 45%),
-        radial-gradient(circle at 50% 85%, rgba(79, 172, 254, 0.06) 0%, transparent 50%);
+        radial-gradient(circle at 50% 10%, rgba(0, 102, 255, 0.12) 0%, transparent 60%),
+        radial-gradient(circle at 10% 80%, rgba(67, 100, 247, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 90% 90%, rgba(0, 180, 216, 0.08) 0%, transparent 50%);
     }
 
-    /* Top Navigation Bar */
-    header {
-      background: rgba(10, 14, 23, 0.9);
+    /* Top Desktop Showcase Bar */
+    .desktop-header {
+      width: 100%;
+      background: rgba(14, 20, 36, 0.85);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border-subtle);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      padding: 12px 28px;
+      padding: 12px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 16px;
+      z-index: 100;
     }
 
     .brand-group {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
-    .brand-logo {
-      height: 42px;
-      width: 42px;
+    .brand-logo-img {
+      height: 38px;
+      width: 38px;
       border-radius: 10px;
       object-fit: contain;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 3px;
-      border: 1px solid rgba(0, 242, 254, 0.3);
-      box-shadow: 0 0 20px rgba(0, 242, 254, 0.25);
+      background: rgba(0, 102, 255, 0.15);
+      padding: 4px;
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      box-shadow: 0 0 15px rgba(0, 102, 255, 0.25);
     }
 
-    .brand-text h1 {
-      font-size: 1.25rem;
+    .brand-title h1 {
+      font-size: 1.15rem;
       font-weight: 800;
       letter-spacing: -0.5px;
       background: var(--primary-gradient);
@@ -85,1353 +91,1886 @@
       -webkit-text-fill-color: transparent;
     }
 
-    .brand-text p {
-      font-size: 0.72rem;
+    .brand-title p {
+      font-size: 0.68rem;
       color: var(--text-muted);
       letter-spacing: 0.5px;
       text-transform: uppercase;
       font-weight: 600;
     }
 
-    .system-pills {
+    /* Screen Selector Pills */
+    .screen-selector-bar {
       display: flex;
       align-items: center;
-      gap: 10px;
-    }
-
-    .pill {
-      display: inline-flex;
-      align-items: center;
       gap: 6px;
+      overflow-x: auto;
+      max-width: 750px;
+      padding: 4px;
+      scrollbar-width: none;
+    }
+    .screen-selector-bar::-webkit-scrollbar { display: none; }
+
+    .screen-pill {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
       padding: 5px 12px;
       border-radius: 9999px;
       font-size: 0.72rem;
       font-weight: 600;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--border-subtle);
-      color: var(--text-muted);
-    }
-
-    .pill-connected {
-      color: #10B981;
-      border-color: rgba(16, 185, 129, 0.3);
-      background: rgba(16, 185, 129, 0.08);
-    }
-
-    .pill-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--accent-green);
-      box-shadow: 0 0 8px var(--accent-green);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.9); }
-    }
-
-    .role-select {
-      background: rgba(0, 242, 254, 0.08);
-      color: var(--primary);
-      border: 1px solid rgba(0, 242, 254, 0.3);
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      font-family: inherit;
       cursor: pointer;
-      outline: none;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .screen-pill:hover {
+      background: rgba(0, 102, 255, 0.15);
+      color: #fff;
+      border-color: rgba(0, 102, 255, 0.4);
+    }
+    .screen-pill.active {
+      background: var(--button-gradient);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 0 12px rgba(0, 102, 255, 0.4);
     }
 
-    .action-links {
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn {
+    /* Mobile Quick Connect Banner */
+    .wifi-pill {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 7px 14px;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      border: none;
-      font-family: inherit;
-    }
-
-    .btn-primary {
-      background: var(--primary-gradient);
-      color: #06080D;
-      box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
-    }
-    .btn-primary:hover {
-      box-shadow: 0 0 25px rgba(0, 242, 254, 0.5);
-      transform: translateY(-1px);
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text-main);
-      border: 1px solid var(--border-subtle);
-    }
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    /* Main Container */
-    main {
-      max-width: 1650px;
-      margin: 0 auto;
-      padding: 24px;
-      display: grid;
-      grid-template-columns: 420px 1fr 400px;
-      gap: 24px;
-    }
-
-    @media (max-width: 1400px) {
-      main {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .panel {
-      background: var(--bg-card);
-      backdrop-filter: blur(14px);
-      border: 1px solid var(--border-subtle);
-      border-radius: 18px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    }
-
-    .panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--border-subtle);
-      padding-bottom: 12px;
-    }
-
-    .panel-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    /* Phone Mockup Frame */
-    .phone-container {
-      width: 100%;
-      height: 720px;
-      background: #090B10;
-      border-radius: 40px;
-      border: 4px solid #1E2536;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.85), 0 0 25px rgba(0, 242, 254, 0.15);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
-
-    .phone-notch {
-      width: 130px;
-      height: 18px;
-      background: #1E2536;
-      border-radius: 0 0 12px 12px;
-      margin: 0 auto;
-      position: relative;
-      z-index: 10;
-    }
-
-    .phone-screen {
-      flex: 1;
-      padding: 16px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .phone-screen::-webkit-scrollbar {
-      width: 4px;
-    }
-    .phone-screen::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-    }
-
-    .mobile-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-bottom: 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .mobile-header h3 {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    .task-card-mini {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 12px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .task-card-mini:hover {
-      background: rgba(0, 242, 254, 0.06);
-      border-color: rgba(0, 242, 254, 0.35);
-      transform: translateY(-2px);
-    }
-    .task-card-mini.active {
-      border-color: var(--primary);
-      background: rgba(0, 242, 254, 0.09);
-    }
-
-    .task-card-mini h4 {
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-      color: #fff;
-    }
-
-    .task-meta {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.72rem;
-      color: var(--text-muted);
-    }
-
-    .reward-badge {
-      color: var(--primary);
-      font-weight: 700;
-      background: rgba(0, 242, 254, 0.12);
-      padding: 2px 7px;
-      border-radius: 4px;
-    }
-
-    /* Live Camera & HUD */
-    .camera-hud {
-      position: relative;
-      background: #000;
-      height: 230px;
-      border-radius: 14px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-    }
-
-    .camera-feed {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .hud-overlay {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 10px;
-      background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, transparent 40%, transparent 60%, rgba(0,0,0,0.75) 100%);
-    }
-
-    .hud-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .rec-indicator {
-      display: flex;
-      align-items: center;
       gap: 6px;
-      background: rgba(244, 63, 94, 0.3);
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 0.68rem;
+      background: rgba(0, 230, 118, 0.08);
+      border: 1px solid rgba(0, 230, 118, 0.25);
+      color: var(--accent-green);
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
       font-weight: 700;
-      color: #F43F5E;
+      font-family: var(--font-mono);
     }
-
-    .rec-dot {
+    .wifi-dot {
       width: 6px;
       height: 6px;
+      background: var(--accent-green);
       border-radius: 50%;
-      background: #F43F5E;
-      animation: pulse 1.2s infinite;
+      box-shadow: 0 0 8px var(--accent-green);
+      animation: pulseDot 2s infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
     }
 
-    .bounding-box {
-      position: absolute;
-      border: 2px solid var(--primary);
-      border-radius: 6px;
-      background: rgba(0, 242, 254, 0.12);
-      box-shadow: 0 0 12px rgba(0, 242, 254, 0.45);
+    /* Main Phone Device Shell */
+    .app-viewport-wrapper {
+      padding: 24px 0 40px 0;
       display: flex;
-      align-items: flex-start;
-      padding: 2px 5px;
-      font-size: 0.65rem;
-      font-weight: 700;
-      color: var(--primary);
-      font-family: var(--font-mono);
-      animation: floatBox 4s infinite alternate ease-in-out;
+      justify-content: center;
+      width: 100%;
     }
 
-    @keyframes floatBox {
-      0% { top: 22%; left: 28%; width: 115px; height: 100px; }
-      100% { top: 32%; left: 38%; width: 110px; height: 95px; }
+    .phone-device {
+      width: 390px;
+      height: 844px;
+      background: var(--bg-surface);
+      border-radius: 48px;
+      border: 4px solid #1E293B;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 40px rgba(0, 102, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
-    /* Stats Grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-    }
-
-    .stat-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 14px;
-    }
-
-    .stat-val {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: var(--text-main);
-      font-family: var(--font-mono);
-      margin-top: 4px;
-    }
-
-    .stat-lbl {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      font-weight: 600;
-    }
-
-    /* Pipeline Flow */
-    .pipeline-flow {
+    /* iPhone Dynamic Island / Notch */
+    .dynamic-island {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 28px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 99;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(0, 0, 0, 0.25);
-      border-radius: 12px;
-      padding: 14px;
-      border: 1px solid var(--border-subtle);
-      gap: 6px;
-      overflow-x: auto;
+      padding: 0 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+    .island-cam {
+      width: 10px;
+      height: 10px;
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 50%;
+    }
+    .island-sensor {
+      width: 6px;
+      height: 6px;
+      background: #004488;
+      border-radius: 50%;
     }
 
-    .pipe-step {
+    /* Phone Status Bar */
+    .phone-status-bar {
+      height: 44px;
+      padding: 12px 24px 0 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #fff;
+      z-index: 90;
+      user-select: none;
+    }
+    .status-icons {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      font-size: 0.72rem;
+    }
+
+    /* Screen Container */
+    .screen-container {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      scrollbar-width: none;
+    }
+    .screen-container::-webkit-scrollbar { display: none; }
+
+    .app-screen {
+      display: none;
+      flex-direction: column;
+      flex: 1;
+      padding: 16px 20px 24px 20px;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+    .app-screen.active {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Bottom Navigation Bar */
+    .bottom-nav {
+      height: 72px;
+      background: rgba(14, 20, 36, 0.95);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 8px 10px 8px;
+      z-index: 90;
+    }
+
+    .nav-item {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 4px;
-      text-align: center;
-      min-width: 80px;
+      color: var(--text-muted);
+      font-size: 0.65rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+    }
+    .nav-item svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+    }
+    .nav-item.active {
+      color: var(--primary-light);
+    }
+    .nav-item.active svg {
+      stroke: var(--primary-light);
+      filter: drop-shadow(0 0 6px rgba(0, 180, 216, 0.6));
     }
 
-    .pipe-badge {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: rgba(0, 242, 254, 0.1);
-      border: 1px solid var(--primary);
-      color: var(--primary);
+    /* ========================================================= */
+    /* UI SCREENS STYLING                                        */
+    /* ========================================================= */
+
+    /* 1. Splash Screen */
+    #screen-splash {
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      background: radial-gradient(circle at 50% 50%, rgba(0, 102, 255, 0.15) 0%, #070B14 70%);
+    }
+    .splash-logo {
+      width: 90px;
+      height: 90px;
+      border-radius: 24px;
+      background: rgba(0, 102, 255, 0.1);
+      border: 2px solid rgba(0, 102, 255, 0.4);
+      padding: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 35px rgba(0, 102, 255, 0.4);
+      animation: pulseLogo 3s infinite ease-in-out;
+    }
+    @keyframes pulseLogo {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(0, 102, 255, 0.3); }
+      50% { transform: scale(1.05); box-shadow: 0 0 45px rgba(0, 102, 255, 0.6); }
+    }
+    .splash-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    .splash-tagline {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 60px;
+    }
+    .progress-bar-container {
+      width: 140px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .progress-bar-fill {
+      width: 40%;
+      height: 100%;
+      background: var(--button-gradient);
+      border-radius: 9999px;
+      animation: loadingAnim 2s infinite ease-in-out;
+    }
+    @keyframes loadingAnim {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(250%); }
+    }
+
+    /* 2. Onboarding Screens */
+    .onboarding-screen {
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      padding: 30px 20px 20px 20px;
+    }
+    .onboarding-skip {
+      align-self: flex-end;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+    }
+    .onboarding-hero {
+      width: 240px;
+      height: 240px;
+      border-radius: 28px;
+      background: radial-gradient(circle at 50% 50%, rgba(0, 102, 255, 0.25) 0%, rgba(14, 20, 36, 0.8) 100%);
+      border: 1px solid rgba(0, 102, 255, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.78rem;
-      font-weight: 700;
+      position: relative;
+      overflow: hidden;
+      margin: 20px 0;
+      box-shadow: 0 0 30px rgba(0, 102, 255, 0.2);
     }
-
-    .pipe-arrow {
-      color: rgba(255, 255, 255, 0.2);
-      font-size: 0.8rem;
+    .hero-hologram-svg {
+      width: 140px;
+      height: 140px;
+      filter: drop-shadow(0 0 15px rgba(0, 180, 216, 0.5));
     }
-
-    .pipe-text {
-      font-size: 0.68rem;
-      font-weight: 600;
+    .onboarding-headline {
+      font-size: 1.55rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+    .onboarding-subtext {
+      font-size: 0.85rem;
       color: var(--text-muted);
+      line-height: 1.45;
+      max-width: 280px;
+      margin: 0 auto 24px auto;
     }
-
-    /* Tables */
-    .table-container {
-      overflow-x: auto;
-      border-radius: 10px;
-      border: 1px solid var(--border-subtle);
-      max-height: 250px;
+    .dots-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
     }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-      text-align: left;
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
     }
-
-    th {
-      background: rgba(255, 255, 255, 0.04);
-      color: var(--text-muted);
-      padding: 10px 14px;
-      font-weight: 600;
-      border-bottom: 1px solid var(--border-subtle);
-      position: sticky;
-      top: 0;
-      backdrop-filter: blur(8px);
-    }
-
-    td {
-      padding: 11px 14px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      color: var(--text-main);
-    }
-
-    tr:hover td {
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    .status-badge {
-      display: inline-block;
-      padding: 3px 8px;
+    .dot.active {
+      width: 22px;
       border-radius: 9999px;
-      font-size: 0.68rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      font-family: var(--font-mono);
+      background: var(--primary);
+      box-shadow: 0 0 8px var(--primary);
     }
-
-    .status-active, .status-approved {
-      background: rgba(16, 185, 129, 0.15);
-      color: #10B981;
-      border: 1px solid rgba(16, 185, 129, 0.3);
-    }
-    .status-in_review, .status-processing, .status-uploading {
-      background: rgba(245, 158, 11, 0.15);
-      color: #F59E0B;
-      border: 1px solid rgba(245, 158, 11, 0.3);
-    }
-    .status-draft {
-      background: rgba(156, 163, 175, 0.15);
-      color: #9CA3AF;
-      border: 1px solid rgba(156, 163, 175, 0.3);
-    }
-    .status-rejected {
-      background: rgba(244, 63, 94, 0.15);
-      color: #F43F5E;
-      border: 1px solid rgba(244, 63, 94, 0.3);
-    }
-
-    /* Right Column: Review & Dataset */
-    .dataset-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--border-subtle);
-      border-radius: 12px;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .dataset-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .dataset-name {
-      font-size: 0.88rem;
-      font-weight: 700;
+    .btn-primary-pill {
+      width: 100%;
+      background: var(--button-gradient);
       color: #fff;
-    }
-
-    .export-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      border: none;
+      border-radius: 9999px;
+      padding: 15px 24px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0, 102, 255, 0.4);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       gap: 8px;
     }
+    .btn-primary-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 102, 255, 0.6);
+    }
 
-    .btn-export {
-      padding: 8px 10px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      border-radius: 6px;
-      background: rgba(0, 242, 254, 0.08);
-      color: var(--primary);
-      border: 1px solid rgba(0, 242, 254, 0.25);
-      cursor: pointer;
+    /* 3. Auth Screens (Login & Register) */
+    .auth-header {
       text-align: center;
-      transition: all 0.2s ease;
-      text-decoration: none;
+      margin: 20px 0 28px 0;
     }
-    .btn-export:hover {
-      background: var(--primary);
-      color: #06080D;
+    .auth-logo {
+      width: 52px;
+      height: 52px;
+      margin-bottom: 12px;
     }
-
-    /* Log Box */
-    .log-terminal {
-      background: #000;
-      border-radius: 10px;
-      padding: 12px;
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      color: #10B981;
-      height: 140px;
-      overflow-y: auto;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      white-space: pre-wrap;
+    .auth-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 6px;
     }
-
-    /* Mobile Broadcast Banner & QR Modal */
-    .mobile-broadcast-banner {
-      background: linear-gradient(90deg, rgba(0, 242, 254, 0.12) 0%, rgba(121, 40, 202, 0.14) 100%);
-      border-bottom: 1px solid rgba(0, 242, 254, 0.3);
-      padding: 10px 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
+    .auth-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
     }
-    .broadcast-left {
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .input-box {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #fff;
+      font-size: 0.88rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .input-box:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 10px rgba(0, 102, 255, 0.25);
+    }
+    .divider-or {
       display: flex;
       align-items: center;
       gap: 12px;
-      font-size: 0.85rem;
-    }
-    .broadcast-icon {
-      font-size: 1.3rem;
-    }
-    .broadcast-url {
-      font-family: var(--font-mono);
-      color: var(--primary);
-      background: rgba(0, 242, 254, 0.1);
-      padding: 3px 8px;
-      border-radius: 6px;
-      margin-left: 6px;
-      font-size: 0.82rem;
+      margin: 18px 0;
+      color: var(--text-subtle);
+      font-size: 0.72rem;
+      text-transform: uppercase;
       font-weight: 700;
     }
-    .broadcast-actions {
-      display: flex;
-      gap: 10px;
+    .divider-or::before, .divider-or::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-subtle);
     }
-    .qr-modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(8px);
-      z-index: 999;
+    .social-btn {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      border-radius: 9999px;
+      padding: 13px;
+      font-size: 0.85rem;
+      font-weight: 600;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-    }
-    .qr-modal-content {
-      background: var(--bg-surface);
-      border: 1px solid rgba(0, 242, 254, 0.35);
-      border-radius: 20px;
-      padding: 24px;
-      text-align: center;
-      max-width: 360px;
-      width: 100%;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+      gap: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
     }
 
-    @media (max-width: 768px) {
-      header {
-        padding: 10px 16px;
-        flex-direction: column;
-        gap: 12px;
-        align-items: flex-start;
-      }
-      .system-pills {
+    /* 4. Home Dashboard Screen */
+    .home-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .user-greeting h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+    .user-greeting p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0066FF, #00B4D8);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    /* Stat Card */
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 16px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .stat-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .stat-growth {
+      font-size: 0.72rem;
+      color: var(--accent-green);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    /* Big Start Recording CTA Card */
+    .cta-record-card {
+      background: var(--primary-gradient);
+      border-radius: 18px;
+      padding: 18px 20px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      margin-bottom: 22px;
+      box-shadow: 0 10px 25px rgba(0, 102, 255, 0.35);
+      transition: all 0.2s ease;
+    }
+    .cta-record-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(0, 102, 255, 0.5);
+    }
+    .cta-cam-circle {
+      width: 46px;
+      height: 46px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cta-cam-circle svg {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: #fff;
+    }
+
+    /* Recommended Tasks List */
+    .section-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .section-link {
+      font-size: 0.75rem;
+      color: var(--primary-light);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .task-card-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .task-card-item:hover {
+      border-color: rgba(0, 102, 255, 0.4);
+      background: var(--bg-card-subtle);
+    }
+    .task-thumb {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: #111;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .task-info {
+      flex: 1;
+    }
+    .task-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+    .task-meta {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+    .points-badge {
+      color: var(--accent-green);
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: rgba(0, 230, 118, 0.1);
+      padding: 4px 8px;
+      border-radius: 8px;
+      white-space: nowrap;
+    }
+
+    /* 5. Task Details Screen */
+    .nav-back-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      cursor: pointer;
+    }
+    .nav-back-row h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .task-hero-banner {
+      width: 100%;
+      height: 180px;
+      border-radius: 18px;
+      background: #111;
+      object-fit: cover;
+      margin-bottom: 16px;
+      border: 1px solid var(--border-subtle);
+    }
+    .tag-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .tag-chip {
+      background: rgba(0, 102, 255, 0.15);
+      border: 1px solid rgba(0, 102, 255, 0.3);
+      color: var(--primary-light);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    .instruction-checklist {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-subtle);
+    }
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.8rem;
+      color: var(--text-main);
+      margin-bottom: 12px;
+    }
+    .check-item:last-child { margin-bottom: 0; }
+    .check-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(0, 230, 118, 0.15);
+      color: var(--accent-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+    }
+
+    /* 6. Recording Screen (Camera HUD) */
+    .camera-hud-view {
+      position: relative;
+      flex: 1;
+      background: #000;
+      border-radius: 24px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      margin-bottom: 12px;
+    }
+    .live-camera-feed {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .hud-controls-top {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+    .hud-icon-btn {
+      width: 36px;
+      height: 36px;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+    .ar-bounding-box {
+      position: absolute;
+      top: 35%;
+      left: 25%;
+      width: 50%;
+      height: 35%;
+      border: 2px solid #00F2FE;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+      border-radius: 12px;
+      pointer-events: none;
+      z-index: 5;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: 6px;
+    }
+    .ar-label {
+      background: rgba(0, 242, 254, 0.85);
+      color: #000;
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+    }
+    .hud-bottom-bar {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      z-index: 10;
+    }
+    .timer-badge {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .shutter-btn {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      border: 4px solid #fff;
+      padding: 4px;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .shutter-inner {
+      width: 100%;
+      height: 100%;
+      background: var(--accent-red);
+      border-radius: 50%;
+      transition: all 0.2s;
+    }
+    .shutter-btn.recording .shutter-inner {
+      border-radius: 8px;
+      transform: scale(0.65);
+    }
+    .mode-switch-pill {
+      display: flex;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 9999px;
+      padding: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .mode-item {
+      padding: 4px 14px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .mode-item.active {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* 7. Upload Progress Screen */
+    .upload-box {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 20px;
+      border: 1px solid var(--border-subtle);
+      margin: 20px 0;
+    }
+    .upload-video-preview {
+      width: 100%;
+      height: 140px;
+      border-radius: 14px;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      position: relative;
+    }
+    .play-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .upload-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .progress-bar-lg {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .progress-bar-lg-fill {
+      height: 100%;
+      width: 70%;
+      background: var(--button-gradient);
+    }
+
+    /* 8. My Submissions Screen */
+    .filter-chips-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filter-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.74rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .filter-chip.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+    .status-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: capitalize;
+    }
+    .status-processing { background: rgba(0, 102, 255, 0.15); color: var(--primary-light); }
+    .status-completed { background: rgba(0, 230, 118, 0.15); color: var(--accent-green); }
+    .status-review { background: rgba(255, 179, 0, 0.15); color: var(--accent-amber); }
+    .status-rejected { background: rgba(255, 61, 113, 0.15); color: var(--accent-red); }
+
+    /* 9. Timeline Stepper (Submission Details) */
+    .stepper {
+      margin: 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      padding-left: 28px;
+    }
+    .stepper::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: rgba(255, 255, 255, 0.15);
+    }
+    .step-item {
+      position: relative;
+    }
+    .step-dot {
+      position: absolute;
+      left: -28px;
+      top: 2px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 2px solid var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      color: var(--primary);
+    }
+    .step-item.done .step-dot {
+      background: var(--primary);
+      color: #fff;
+    }
+    .step-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .step-time {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    /* 10. Datasets, Notifications, Settings Cards */
+    .dataset-item-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .btn-download-sm {
+      background: var(--button-gradient);
+      color: #fff;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .notif-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      background: var(--bg-card);
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 10px;
+    }
+    .notif-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    .settings-group {
+      margin-bottom: 20px;
+    }
+    .settings-header {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+    .settings-item {
+      background: var(--bg-card);
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Full Mobile Mode (Mobile Screen Viewport) */
+    @media (max-width: 600px) {
+      .desktop-header {
         display: none;
       }
-      .mobile-broadcast-banner {
-        padding: 10px 16px;
-        flex-direction: column;
-        align-items: flex-start;
+      .app-viewport-wrapper {
+        padding: 0;
+        height: 100vh;
+        width: 100vw;
       }
-      main {
-        padding: 12px;
-        gap: 16px;
+      .phone-device {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
       }
-      .phone-container {
-        height: auto;
-        min-height: 80vh;
-        border-radius: 20px;
-        border-width: 2px;
+      .dynamic-island {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
-  <header>
+  <!-- Desktop Header with Showcase Screen Switcher -->
+  <header class="desktop-header">
     <div class="brand-group">
-      <img src="/assets/logo.png" alt="ROBOLENS Logo" class="brand-logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\' fill=\'%2300F2FE\'><polygon points=\'50 15, 85 80, 15 80\'/></svg>'">
-      <div class="brand-text">
+      <img src="/assets/logo.png" alt="ROBOLENS Logo" class="brand-logo-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\' fill=\'%230066FF\'><circle cx=\'50\' cy=\'50\' r=\'40\'/></svg>'">
+      <div class="brand-title">
         <h1>ROBOLENS</h1>
-        <p>Physical AI Data Infrastructure — Localhost</p>
+        <p>Every Action Teaches AI</p>
       </div>
     </div>
 
-    <!-- Active Role Switcher -->
-    <div style="display:flex; align-items:center; gap:8px;">
-      <span style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Active Persona:</span>
-      <select id="roleSelector" class="role-select" onchange="switchPersona(this.value)">
-        <option value="admin">⚡ Platform Admin (admin@robolens.ai)</option>
-        <option value="contributor">📱 Contributor (contributor@robolens.ai)</option>
-        <option value="reviewer">🔍 Quality Reviewer (reviewer@robolens.ai)</option>
-      </select>
+    <!-- 14 Interactive Screen Selector Pills -->
+    <div class="screen-selector-bar">
+      <button class="screen-pill active" onclick="switchScreen('screen-home')">Home Dashboard</button>
+      <button class="screen-pill" onclick="switchScreen('screen-task-detail')">Task Details</button>
+      <button class="screen-pill" onclick="switchScreen('screen-record')">Camera HUD</button>
+      <button class="screen-pill" onclick="switchScreen('screen-upload-progress')">Upload Progress</button>
+      <button class="screen-pill" onclick="switchScreen('screen-submissions')">My Submissions</button>
+      <button class="screen-pill" onclick="switchScreen('screen-sub-detail')">Submission Details</button>
+      <button class="screen-pill" onclick="switchScreen('screen-datasets')">Datasets</button>
+      <button class="screen-pill" onclick="switchScreen('screen-notifications')">Notifications</button>
+      <button class="screen-pill" onclick="switchScreen('screen-settings')">Settings</button>
+      <button class="screen-pill" onclick="switchScreen('screen-onboarding-1')">Onboarding 1</button>
+      <button class="screen-pill" onclick="switchScreen('screen-onboarding-2')">Onboarding 2</button>
+      <button class="screen-pill" onclick="switchScreen('screen-onboarding-3')">Onboarding 3</button>
+      <button class="screen-pill" onclick="switchScreen('screen-login')">Login</button>
+      <button class="screen-pill" onclick="switchScreen('screen-register')">Register</button>
+      <button class="screen-pill" onclick="switchScreen('screen-splash')">Splash Screen</button>
     </div>
 
-    <div class="system-pills">
-      <div class="pill pill-connected" id="backendStatusPill">
-        <span class="pill-dot"></span>
-        Backend Connected (Port 8000)
-      </div>
-      <div class="pill">
-        <span class="pill-dot" style="background:#00F2FE; box-shadow: 0 0 8px #00F2FE;"></span>
-        PostgreSQL / SQLite
-      </div>
-      <div class="pill">
-        <span class="pill-dot" style="background:#7928CA; box-shadow: 0 0 8px #7928CA;"></span>
-        S3 Storage
-      </div>
-    </div>
-
-    <div class="action-links">
-      <a href="/api/v1/docs" target="_blank" class="btn btn-primary">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-        Swagger OpenAPI
-      </a>
-      <a href="https://github.com/indrajitkumar23541-a11y/ROBOLENS" target="_blank" class="btn btn-secondary">GitHub</a>
+    <div class="wifi-pill">
+      <span class="wifi-dot"></span>
+      <span>Live Phone: 10.83.134.3:8000</span>
     </div>
   </header>
 
-  <!-- Mobile Phone Quick Connect Bar -->
-  <div class="mobile-broadcast-banner" id="mobileBroadcastBanner">
-    <div class="broadcast-left">
-      <span class="broadcast-icon">📱</span>
-      <div>
-        <strong style="color:#fff;">Phone Par Open Karein (Same Wi-Fi):</strong>
-        <span class="broadcast-url">http://10.83.134.3:8000/workbench</span>
+  <!-- Phone Shell Container -->
+  <div class="app-viewport-wrapper">
+    <div class="phone-device">
+      
+      <!-- Dynamic Island Notch -->
+      <div class="dynamic-island">
+        <div class="island-cam"></div>
+        <div class="island-sensor"></div>
       </div>
-    </div>
-    <div class="broadcast-actions">
-      <button class="btn btn-secondary" onclick="navigator.clipboard.writeText('http://10.83.134.3:8000/workbench'); alert('Mobile Link copied! Phone me browser me paste karein: http://10.83.134.3:8000/workbench');">📋 Copy Mobile Link</button>
-      <button class="btn btn-primary" onclick="toggleMobileQrModal()">📷 Phone Camera Se Scan Karein</button>
-    </div>
-  </div>
 
-  <!-- QR Code Modal -->
-  <div id="qrModal" class="qr-modal" style="display:none;" onclick="if(event.target===this) toggleMobileQrModal()">
-    <div class="qr-modal-content">
-      <h3 style="color:#fff; font-size:1.1rem; margin-bottom:4px;">Phone Se Scan Karein</h3>
-      <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:16px;">Apne phone camera ko screen ke samne layein aur link open karein (Same Wi-Fi)</p>
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=http://10.83.134.3:8000/workbench" alt="ROBOLENS Mobile QR" style="border-radius:14px; border:2px solid var(--primary); box-shadow:0 0 25px rgba(0,242,254,0.35); background:#fff; padding:8px;">
-      <div style="font-family:var(--font-mono); font-size:0.8rem; color:var(--primary); margin-top:14px; word-break:break-all;">http://10.83.134.3:8000/workbench</div>
-      <button class="btn btn-secondary" style="margin-top:16px; width:100%; justify-content:center;" onclick="toggleMobileQrModal()">Close</button>
-    </div>
-  </div>
-
-  <!-- Main Grid -->
-  <main>
-
-    <!-- Column 1: Contributor Mobile Simulator -->
-    <div class="panel">
-      <div class="panel-header">
-        <div class="panel-title">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
-          Contributor Mobile App Simulator
+      <!-- Phone Status Bar -->
+      <div class="phone-status-bar">
+        <span>9:41</span>
+        <div class="status-icons">
+          <span>5G</span>
+          <span>100%</span>
         </div>
-        <span class="status-badge status-active">Flutter App</span>
       </div>
 
-      <div class="phone-container">
-        <div class="phone-notch"></div>
-        <div class="phone-screen" id="mobileScreen">
+      <!-- Main Screen Switcher Body -->
+      <div class="screen-container">
 
-          <div class="mobile-header">
-            <h3>Record Task</h3>
-            <span class="reward-badge" id="mobileRewardBadge">$12.50 USD</span>
+        <!-- ============================================== -->
+        <!-- SCREEN 1: SPLASH SCREEN                        -->
+        <!-- ============================================== -->
+        <div class="app-screen" id="screen-splash">
+          <div style="flex:1;"></div>
+          <img src="/assets/logo.png" class="splash-logo" alt="ROBOLENS">
+          <div class="splash-title">ROBOLENS</div>
+          <div class="splash-tagline">EVERY ACTION TEACHES AI</div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill"></div>
+          </div>
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:40px;">Loading...</div>
+          <div style="flex:1;"></div>
+          <button class="btn-primary-pill" onclick="switchScreen('screen-onboarding-1')">Open Onboarding →</button>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCREEN 2: ONBOARDING 1                         -->
+        <!-- ============================================== -->
+        <div class="app-screen onboarding-screen" id="screen-onboarding-1">
+          <div class="onboarding-skip" onclick="switchScreen('screen-home')">SKIP</div>
+          <div class="onboarding-hero">
+            <!-- 3D Humanoid Robot Holding Camera Lens SVG -->
+            <svg class="hero-hologram-svg" viewBox="0 0 120 120" fill="none">
+              <circle cx="60" cy="60" r="50" stroke="#0066FF" stroke-width="2" stroke-dasharray="4 4"/>
+              <circle cx="60" cy="60" r="32" stroke="#00B4D8" stroke-width="3"/>
+              <circle cx="60" cy="60" r="16" fill="#0066FF"/>
+              <path d="M30 90 Q 60 70 90 90" stroke="#00F2FE" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="60" cy="40" r="12" fill="#fff" fill-opacity="0.2"/>
+            </svg>
+          </div>
+          <div>
+            <div class="onboarding-headline">Real People.<br>Real Actions.<br><span style="color:#00B4D8;">Better Robots.</span></div>
+            <div class="onboarding-subtext">Record everyday tasks and help build the future of robotics.</div>
+          </div>
+          <div class="dots-row">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+          <button class="btn-primary-pill" onclick="switchScreen('screen-onboarding-2')">Next →</button>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCREEN 3: ONBOARDING 2                         -->
+        <!-- ============================================== -->
+        <div class="app-screen onboarding-screen" id="screen-onboarding-2">
+          <div class="onboarding-skip" onclick="switchScreen('screen-home')">SKIP</div>
+          <div class="onboarding-hero">
+            <!-- Box with AR Reticle SVG -->
+            <svg class="hero-hologram-svg" viewBox="0 0 120 120" fill="none">
+              <rect x="35" y="45" width="50" height="40" rx="6" fill="#8B5A2B" stroke="#D29A5C" stroke-width="2"/>
+              <path d="M25 35 L40 35 M25 35 L25 50" stroke="#00F2FE" stroke-width="3"/>
+              <path d="M95 35 L80 35 M95 35 L95 50" stroke="#00F2FE" stroke-width="3"/>
+              <path d="M25 95 L40 95 M25 95 L25 80" stroke="#00F2FE" stroke-width="3"/>
+              <path d="M95 95 L80 95 M95 95 L95 80" stroke="#00F2FE" stroke-width="3"/>
+            </svg>
+          </div>
+          <div>
+            <div class="onboarding-headline">Capture Tasks</div>
+            <div class="onboarding-subtext">Record simple real-world tasks using your phone's camera.</div>
+          </div>
+          <div class="dots-row">
+            <div class="dot"></div>
+            <div class="dot active"></div>
+            <div class="dot"></div>
+          </div>
+          <button class="btn-primary-pill" onclick="switchScreen('screen-onboarding-3')">Next →</button>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCREEN 4: ONBOARDING 3                         -->
+        <!-- ============================================== -->
+        <div class="app-screen onboarding-screen" id="screen-onboarding-3">
+          <div class="onboarding-skip" onclick="switchScreen('screen-home')">SKIP</div>
+          <div class="onboarding-hero">
+            <!-- AI Digital Brain SVG -->
+            <svg class="hero-hologram-svg" viewBox="0 0 120 120" fill="none">
+              <circle cx="60" cy="60" r="45" stroke="#0052D4" stroke-width="2"/>
+              <path d="M40 50 Q 60 30 80 50 T 60 90 Z" fill="rgba(0, 180, 216, 0.2)" stroke="#00B4D8" stroke-width="2"/>
+              <circle cx="50" cy="55" r="4" fill="#00E676"/>
+              <circle cx="70" cy="55" r="4" fill="#00E676"/>
+              <line x1="50" y1="55" x2="70" y2="55" stroke="#00E676" stroke-width="2"/>
+            </svg>
+          </div>
+          <div>
+            <div class="onboarding-headline">Powering<br><span style="color:#00B4D8;">Physical AI</span></div>
+            <div class="onboarding-subtext">Your videos are processed with AI, annotated and turned into high-quality robotics datasets.</div>
+          </div>
+          <div class="dots-row">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot active"></div>
+          </div>
+          <button class="btn-primary-pill" onclick="switchScreen('screen-login')">Get Started</button>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCREEN 5: LOGIN                                -->
+        <!-- ============================================== -->
+        <div class="app-screen" id="screen-login">
+          <div class="auth-header">
+            <img src="/assets/logo.png" class="auth-logo" alt="ROBOLENS">
+            <div class="auth-title">Welcome Back</div>
+            <div class="auth-subtitle">Sign in to continue your journey</div>
           </div>
 
-          <!-- Camera Live Feed -->
-          <div class="camera-hud">
-            <video id="webcamFeed" class="camera-feed" autoplay muted playsinline></video>
-            <canvas id="synthFeed" class="camera-feed" style="display:none;"></canvas>
-            
-            <div class="bounding-box">
-              <span>CUP_OBJ: 0.96</span>
-            </div>
+          <div class="form-group">
+            <input type="text" class="input-box" id="loginUsername" placeholder="Email or Phone" value="contributor@robolens.ai">
+          </div>
+          <div class="form-group">
+            <input type="password" class="input-box" id="loginPassword" placeholder="Password" value="Password123!">
+          </div>
 
-            <div class="hud-overlay">
-              <div class="hud-top">
-                <span class="rec-indicator" id="recBadge">
-                  <span class="rec-dot"></span>
-                  <span id="recStatusText">LIVE 1080p 30FPS</span>
-                </span>
-                <span style="font-size:0.7rem; font-family:var(--font-mono); color:#fff;" id="timerLabel">00:00 / 00:30</span>
+          <div style="text-align:right; margin-bottom:20px;">
+            <a href="javascript:void(0)" style="font-size:0.75rem; color:var(--primary-light); text-decoration:none;">Forgot Password?</a>
+          </div>
+
+          <button class="btn-primary-pill" onclick="handleLoginAndProceed()">Sign In</button>
+
+          <div class="divider-or">or</div>
+
+          <button class="social-btn" onclick="handleLoginAndProceed()">
+            <span>🌐</span> Continue with Google
+          </button>
+          <button class="social-btn" onclick="handleLoginAndProceed()">
+            <span></span> Continue with Apple
+          </button>
+
+          <div style="text-align:center; margin-top:20px; font-size:0.78rem; color:var(--text-muted);">
+            Don't have an account? <a href="javascript:void(0)" onclick="switchScreen('screen-register')" style="color:var(--primary-light); font-weight:700;">Sign Up</a>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCREEN 6: CREATE ACCOUNT (REGISTER)            -->
+        <!-- ============================================== -->
+        <div class="app-screen" id="screen-register">
+          <div class="auth-header">
+            <img src="/assets/logo.png" class="auth-logo" alt="ROBOLENS">
+            <div class="auth-title">Create Account</div>
+            <div class="auth-subtitle">Join the community and start contributing</div>
+          </div>
+
+          <div class="form-group">
+            <input type="text" class="input-box" placeholder="Full Name" value="Indrajit Kumar">
+          </div>
+          <div class="form-group">
+            <input type="email" class="input-box" placeholder="Email" value="indrajitkumar23541@gmail.com">
+          </div>
+          <div class="form-group">
+            <input type="password" class="input-box" placeholder="Password" value="Password123!">
+          </div>
+
+          <div style="display:flex; align-items:flex-start; gap:8px; margin-bottom:20px;">
+            <input type="checkbox" id="termsCheck" checked style="accent-color:var(--primary); margin-top:3px;">
+            <label for="termsCheck" style="font-size:0.72rem; color:var(--text-muted);">
+              I agree to the <span style="color:var(--primary-light);">Terms of Service</span> and <span style="color:var(--primary-light);">Privacy Policy</span>
+            </label>
+          </div>
+
+          <button class="btn-primary-pill" onclick="handleLoginAndProceed()">Create Account</button>
+
+          <div style="text-align:center; margin-top:24px; font-size:0.78rem; color:var(--text-muted);">
+            Already have an account? <a href="javascript:void(0)" onclick="switchScreen('screen-login')" style="color:var(--primary-light); font-weight:700;">Login</a>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCREEN 7: HOME DASHBOARD                       -->
+        <!-- ============================================== -->
+        <div class="app-screen active" id="screen-home">
+          
+          <!-- Top Profile Row -->
+          <div class="home-top-bar">
+            <div class="user-greeting">
+              <h2>Hello, Indrajit 👋</h2>
+              <p>Keep going! You're making a difference.</p>
+            </div>
+            <div class="user-avatar" onclick="switchScreen('screen-settings')">IK</div>
+          </div>
+
+          <!-- Total Submissions Stat Card -->
+          <div class="stat-card">
+            <div>
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:600;">Total Submissions</div>
+              <div class="stat-value" id="homeSubCountDisplay">12</div>
+              <div class="stat-growth">↗ +3 this week</div>
+            </div>
+            <!-- Mini Bar Chart Graphic -->
+            <svg width="70" height="38" viewBox="0 0 70 38" fill="none">
+              <rect x="5" y="24" width="7" height="14" rx="2" fill="#0066FF" fill-opacity="0.4"/>
+              <rect x="18" y="16" width="7" height="22" rx="2" fill="#0066FF" fill-opacity="0.6"/>
+              <rect x="31" y="20" width="7" height="18" rx="2" fill="#0066FF" fill-opacity="0.5"/>
+              <rect x="44" y="10" width="7" height="28" rx="2" fill="#0066FF" fill-opacity="0.8"/>
+              <rect x="57" y="4" width="7" height="34" rx="2" fill="#0066FF"/>
+            </svg>
+          </div>
+
+          <!-- Big Start Recording CTA Card -->
+          <div class="cta-record-card" onclick="openTaskDetails('task_cup_manipulation', 'Pick up a mug', 'Home · 2-3 min', '+50 pts')">
+            <div class="cta-cam-circle">
+              <svg viewBox="0 0 24 24"><path stroke-width="2" d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4" stroke-width="2"/></svg>
+            </div>
+            <div>
+              <div style="font-size:1.05rem; font-weight:800;">Start Recording</div>
+              <div style="font-size:0.75rem; opacity:0.85;">Contribute a new robotics task</div>
+            </div>
+          </div>
+
+          <!-- Recommended Tasks List -->
+          <div class="section-title-row">
+            <div class="section-title">Recommended Tasks</div>
+            <a href="javascript:void(0)" class="section-link">View All</a>
+          </div>
+
+          <div id="recommendedTaskList">
+            <!-- Task 1: Mug -->
+            <div class="task-card-item" onclick="openTaskDetails('task_cup_manipulation', 'Pick up a mug', 'Home · 2-3 min', '+50 pts')">
+              <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=120&auto=format&fit=crop&q=60" class="task-thumb" alt="Mug">
+              <div class="task-info">
+                <div class="task-title">Pick up a mug</div>
+                <div class="task-meta">Home · 2-3 min</div>
               </div>
-              <div style="font-size:0.65rem; color:#00F2FE; font-family:var(--font-mono);">
-                Target: Pick & Place | AI_ESTIMATE
+              <span class="points-badge">+50 pts</span>
+            </div>
+
+            <!-- Task 2: Drawer -->
+            <div class="task-card-item" onclick="openTaskDetails('task_drawer_pull', 'Open a drawer', 'Home · 2-4 min', '+50 pts')">
+              <img src="https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=120&auto=format&fit=crop&q=60" class="task-thumb" alt="Drawer">
+              <div class="task-info">
+                <div class="task-title">Open a drawer</div>
+                <div class="task-meta">Home · 2-4 min</div>
+              </div>
+              <span class="points-badge">+50 pts</span>
+            </div>
+
+            <!-- Task 3: Object Place -->
+            <div class="task-card-item" onclick="openTaskDetails('task_place_object', 'Place an object', 'Kitchen · 3-5 min', '+75 pts')">
+              <img src="https://images.unsplash.com/photo-1584990347449-397a61dcf351?w=120&auto=format&fit=crop&q=60" class="task-thumb" alt="Kitchen Object">
+              <div class="task-info">
+                <div class="task-title">Place an object</div>
+                <div class="task-meta">Kitchen · 3-5 min</div>
+              </div>
+              <span class="points-badge">+75 pts</span>
+            </div>
+
+            <!-- Task 4: Towel -->
+            <div class="task-card-item" onclick="openTaskDetails('task_fold_towel', 'Fold a towel', 'Home · 3-5 min', '+50 pts')">
+              <img src="https://images.unsplash.com/photo-1616627547584-bf28cee262db?w=120&auto=format&fit=crop&q=60" class="task-thumb" alt="Towel">
+              <div class="task-info">
+                <div class="task-title">Fold a towel</div>
+                <div class="task-meta">Home · 3-5 min</div>
+              </div>
+              <span class="points-badge">+50 pts</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCREEN 8: TASK DETAILS                         -->
+        <!-- ============================================== -->
+        <div class="app-screen" id="screen-task-detail">
+          <div class="nav-back-row" onclick="switchScreen('screen-home')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+            <h3>Task Details</h3>
+          </div>
+
+          <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&auto=format&fit=crop&q=80" class="task-hero-banner" id="detailHeroImage" alt="Task Hero">
+
+          <h2 style="font-size:1.35rem; font-weight:800; margin-bottom:8px;" id="detailTaskTitle">Pick up a mug</h2>
+
+          <div class="tag-row">
+            <span class="tag-chip" id="detailTagCat">Home</span>
+            <span class="tag-chip" id="detailTagDur">2-3 min</span>
+            <span class="points-badge" id="detailTagPts">+50 pts</span>
+          </div>
+
+          <div class="instruction-checklist">
+            <div style="font-size:0.85rem; font-weight:700; margin-bottom:12px;">Instructions</div>
+            <div class="check-item"><span class="check-icon">✓</span> Use one hand to pick up the mug</div>
+            <div class="check-item"><span class="check-icon">✓</span> Keep the object in frame</div>
+            <div class="check-item"><span class="check-icon">✓</span> Record for at least 10 seconds</div>
+            <div class="check-item"><span class="check-icon">✓</span> Ensure good lighting</div>
+          </div>
+
+          <div style="margin-top:auto;">
+            <button class="btn-primary-pill" onclick="startCameraRecording()">Start Recording</button>
+            <div style="font-size:0.68rem; color:var(--text-muted); text-align:center; margin-top:10px;">
+              You will be asked for consent before recording
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCREEN 9: CAMERA HUD RECORDING SCREEN          -->
+        <!-- ============================================== -->
+        <div class="app-screen" id="screen-record" style="padding:10px;">
+          <div class="camera-hud-view">
+            <!-- Real Live Video Feed or Fallback Synthesizer -->
+            <video id="liveCamStream" class="live-camera-feed" autoplay muted playsinline></video>
+            <canvas id="liveCamCanvas" class="live-camera-feed" style="display:none;"></canvas>
+
+            <!-- Top HUD Bar -->
+            <div class="hud-controls-top">
+              <button class="hud-icon-btn" onclick="stopCameraAndBack()">✕</button>
+              <div class="hud-icon-btn" id="flashToggle" onclick="toggleFlash()">⚡</div>
+              <div class="hud-icon-btn" onclick="switchCameraFacing()">↻</div>
+            </div>
+
+            <!-- AR Bounding Box Overlay -->
+            <div class="ar-bounding-box" id="arBox">
+              <span class="ar-label">CUP_OBJ: 0.98</span>
+            </div>
+
+            <!-- Bottom Camera Controls -->
+            <div class="hud-bottom-bar">
+              <div class="timer-badge" id="recTimerLabel">00:08</div>
+
+              <div class="shutter-btn" id="shutterButton" onclick="triggerRecordToggle()">
+                <div class="shutter-inner"></div>
+              </div>
+
+              <div class="mode-switch-pill">
+                <span class="mode-item active">Video</span>
+                <span class="mode-item">Photo</span>
               </div>
             </div>
           </div>
+        </div>
 
-          <!-- Selected Task Info -->
-          <div class="task-card-mini active" id="currentTaskCard">
-            <h4 id="taskTitleDisplay">Loading Tasks from Backend...</h4>
-            <p style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 6px;" id="taskDescDisplay">
-              Connecting to FastAPI on localhost:8000...
-            </p>
-            <div class="task-meta">
-              <span id="taskDurationDisplay">Duration: 10s - 30s</span>
-              <span class="reward-badge" id="taskRewardDisplay">$12.50 USD</span>
+        <!-- ============================================== -->
+        <!-- SCREEN 10: UPLOAD PROGRESS SCREEN              -->
+        <!-- ============================================== -->
+        <div class="app-screen" id="screen-upload-progress">
+          <div class="nav-back-row" onclick="switchScreen('screen-home')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+            <h3>Uploading Video</h3>
+          </div>
+
+          <div class="upload-box">
+            <div class="upload-video-preview">
+              <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=400&auto=format&fit=crop&q=70" style="width:100%; height:100%; object-fit:cover; border-radius:14px; opacity:0.6;">
+              <div class="play-circle" style="position:absolute;">▶</div>
+            </div>
+
+            <div style="font-size:0.85rem; font-weight:700; margin-bottom:12px;" id="uploadFileName">task_20261012_1530.mp4</div>
+
+            <div class="upload-meta">
+              <span id="uploadPercentLabel" style="color:var(--primary-light);">70%</span>
+              <span style="color:var(--text-muted);" id="uploadBytesLabel">2.3 MB / 3.0 MB</span>
+            </div>
+
+            <div class="progress-bar-lg">
+              <div class="progress-bar-lg-fill" id="uploadFillBar"></div>
+            </div>
+
+            <div class="instruction-checklist" style="margin:0; background:transparent; padding:0; border:none;">
+              <div class="check-item"><span class="check-icon">✓</span> Video validation</div>
+              <div class="check-item"><span class="check-icon">✓</span> File integrity check</div>
+              <div class="check-item"><span class="check-icon" style="background:rgba(0,102,255,0.2); color:#00B4D8;">⟳</span> Uploading to secure S3 storage</div>
             </div>
           </div>
 
-          <!-- Record & Direct S3 Upload Trigger -->
-          <div style="display:flex; flex-direction:column; gap:8px;">
-            <button class="btn btn-primary" style="justify-content:center; width:100%;" id="btnRecordUpload" onclick="simulateFullSubmissionFlow()">
-              ⚡ Record Video & Submit to S3
+          <div style="font-size:0.75rem; color:var(--text-muted); line-height:1.45; text-align:center;">
+            Keep the app open while uploading. You can leave the screen, we'll notify you when it's complete.
+          </div>
+
+          <div style="margin-top:auto;">
+            <button class="btn-primary-pill" onclick="switchScreen('screen-submissions')">View My Submissions →</button>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCREEN 11: MY SUBMISSIONS SCREEN               -->
+        <!-- ============================================== -->
+        <div class="app-screen" id="screen-submissions">
+          <div class="nav-back-row" onclick="switchScreen('screen-home')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+            <h3>My Submissions</h3>
+          </div>
+
+          <div class="filter-chips-row">
+            <button class="filter-chip active">All</button>
+            <button class="filter-chip">Processing</button>
+            <button class="filter-chip">Completed</button>
+            <button class="filter-chip">Rejected</button>
+          </div>
+
+          <div id="submissionsListContainer">
+            <!-- Sub 1 -->
+            <div class="task-card-item" onclick="switchScreen('screen-sub-detail')">
+              <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=100&auto=format&fit=crop&q=60" class="task-thumb" alt="Thumb">
+              <div class="task-info">
+                <div class="task-title">Pick up a mug</div>
+                <div class="task-meta">Submitted 01 June 2025</div>
+              </div>
+              <span class="status-tag status-processing">Processing</span>
+            </div>
+
+            <!-- Sub 2 -->
+            <div class="task-card-item" onclick="switchScreen('screen-sub-detail')">
+              <img src="https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=100&auto=format&fit=crop&q=60" class="task-thumb" alt="Thumb">
+              <div class="task-info">
+                <div class="task-title">Open a drawer</div>
+                <div class="task-meta">Submitted 31 May 2025</div>
+              </div>
+              <span class="status-tag status-completed">Completed</span>
+            </div>
+
+            <!-- Sub 3 -->
+            <div class="task-card-item" onclick="switchScreen('screen-sub-detail')">
+              <img src="https://images.unsplash.com/photo-1584990347449-397a61dcf351?w=100&auto=format&fit=crop&q=60" class="task-thumb" alt="Thumb">
+              <div class="task-info">
+                <div class="task-title">Place an object</div>
+                <div class="task-meta">Submitted 30 May 2025</div>
+              </div>
+              <span class="status-tag status-completed">Completed</span>
+            </div>
+
+            <!-- Sub 4 -->
+            <div class="task-card-item" onclick="switchScreen('screen-sub-detail')">
+              <img src="https://images.unsplash.com/photo-1616627547584-bf28cee262db?w=100&auto=format&fit=crop&q=60" class="task-thumb" alt="Thumb">
+              <div class="task-info">
+                <div class="task-title">Fold a towel</div>
+                <div class="task-meta">Submitted 28 May 2025</div>
+              </div>
+              <span class="status-tag status-review">Review</span>
+            </div>
+
+            <!-- Sub 5 -->
+            <div class="task-card-item" onclick="switchScreen('screen-sub-detail')">
+              <img src="https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=100&auto=format&fit=crop&q=60" class="task-thumb" alt="Thumb">
+              <div class="task-info">
+                <div class="task-title">Press a button</div>
+                <div class="task-meta">Submitted 25 May 2025</div>
+              </div>
+              <span class="status-tag status-rejected">Rejected</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCREEN 12: SUBMISSION DETAILS                  -->
+        <!-- ============================================== -->
+        <div class="app-screen" id="screen-sub-detail">
+          <div class="nav-back-row" onclick="switchScreen('screen-submissions')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+            <h3>Submission Details</h3>
+          </div>
+
+          <div class="upload-video-preview" style="height:170px;">
+            <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&auto=format&fit=crop&q=80" style="width:100%; height:100%; object-fit:cover; border-radius:14px; opacity:0.8;">
+            <div class="play-circle" style="position:absolute;">▶</div>
+            <div style="position:absolute; bottom:8px; right:10px; font-size:0.65rem; background:rgba(0,0,0,0.7); padding:2px 6px; border-radius:4px; font-family:var(--font-mono);">0:25</div>
+          </div>
+
+          <h2 style="font-size:1.15rem; font-weight:800; margin-bottom:4px;">Pick up a mug</h2>
+          <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:16px;">Submitted on 1 June 2025</div>
+
+          <!-- Pipeline Stepper -->
+          <div class="stepper">
+            <div class="step-item done">
+              <div class="step-dot">✓</div>
+              <div class="step-title">Uploaded</div>
+              <div class="step-time">1 June, 10:24 AM</div>
+            </div>
+            <div class="step-item done">
+              <div class="step-dot">✓</div>
+              <div class="step-title">Processing</div>
+              <div class="step-time">1 June, 10:26 AM</div>
+            </div>
+            <div class="step-item done">
+              <div class="step-dot">✓</div>
+              <div class="step-title">AI Analysis</div>
+              <div class="step-time">1 June, 11:10 AM</div>
+            </div>
+            <div class="step-item">
+              <div class="step-dot" style="animation:pulseDot 2s infinite;">⟳</div>
+              <div class="step-title" style="color:var(--primary-light);">Human Review</div>
+              <div class="step-time">In Progress</div>
+            </div>
+          </div>
+
+          <div style="margin-top:auto;">
+            <button class="btn-primary-pill" style="background:transparent; border:1px solid var(--primary); color:var(--primary);">
+              View Annotations
             </button>
-            <div style="font-size:0.68rem; color:var(--text-muted); text-align:center;">
-              ✓ Real JWT Auth | Direct Object Storage PUT | Checksum
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCREEN 13: DATASETS                            -->
+        <!-- ============================================== -->
+        <div class="app-screen" id="screen-datasets">
+          <div class="nav-back-row" onclick="switchScreen('screen-home')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+            <h3>Datasets</h3>
+          </div>
+
+          <div class="filter-chips-row" style="margin-bottom:18px;">
+            <button class="filter-chip active" style="flex:1; text-align:center;">Public</button>
+            <button class="filter-chip" style="flex:1; text-align:center;">My Data</button>
+          </div>
+
+          <div class="dataset-item-card">
+            <div>
+              <div style="font-size:0.9rem; font-weight:800; margin-bottom:3px;">General Manipulation</div>
+              <div style="font-size:0.72rem; color:var(--text-muted);">v1.0 · 1.2 GB · 1250 samples</div>
+            </div>
+            <button class="btn-download-sm" onclick="alert('Exporting LeRobot / RLDS tar.gz package!')">Download</button>
+          </div>
+
+          <div class="dataset-item-card">
+            <div>
+              <div style="font-size:0.9rem; font-weight:800; margin-bottom:3px;">Kitchen Tasks</div>
+              <div style="font-size:0.72rem; color:var(--text-muted);">v1.2 · 650 MB · 580 samples</div>
+            </div>
+            <button class="btn-download-sm" onclick="alert('Exporting LeRobot / RLDS tar.gz package!')">Download</button>
+          </div>
+
+          <div class="dataset-item-card">
+            <div>
+              <div style="font-size:0.9rem; font-weight:800; margin-bottom:3px;">Household Activities</div>
+              <div style="font-size:0.72rem; color:var(--text-muted);">v1.0 · 2.1 GB · 2150 samples</div>
+            </div>
+            <button class="btn-download-sm" onclick="alert('Exporting LeRobot / RLDS tar.gz package!')">Download</button>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- SCREEN 14: NOTIFICATIONS                       -->
+        <!-- ============================================== -->
+        <div class="app-screen" id="screen-notifications">
+          <div class="nav-back-row" onclick="switchScreen('screen-home')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+            <h3>Notifications</h3>
+          </div>
+
+          <div class="notif-item">
+            <div class="notif-icon" style="background:rgba(0,102,255,0.15); color:#0066FF;">IK</div>
+            <div>
+              <div style="font-size:0.82rem; font-weight:700;">Your submission is completed</div>
+              <div style="font-size:0.7rem; color:var(--text-muted);">Pick up a mug · 2h ago</div>
             </div>
           </div>
 
-          <!-- Task Mini List -->
-          <div style="font-size: 0.75rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; margin-top:4px;">
-            Available Manipulation Tasks (<span id="taskCountLabel">0</span>):
+          <div class="notif-item">
+            <div class="notif-icon" style="background:rgba(0,230,118,0.15); color:var(--accent-green);">📹</div>
+            <div>
+              <div style="font-size:0.82rem; font-weight:700;">New task available</div>
+              <div style="font-size:0.7rem; color:var(--text-muted);">Open a drawer · 4h ago</div>
+            </div>
           </div>
-          <div id="taskListContainer" style="display:flex; flex-direction:column; gap:8px;">
-            <!-- Dynamically populated from /api/v1/tasks -->
+
+          <div class="notif-item">
+            <div class="notif-icon" style="background:rgba(0,180,216,0.15); color:var(--primary-light);">📦</div>
+            <div>
+              <div style="font-size:0.82rem; font-weight:700;">Dataset updated</div>
+              <div style="font-size:0.7rem; color:var(--text-muted);">General Manipulation · 1d ago</div>
+            </div>
           </div>
 
-        </div>
-      </div>
-    </div>
+          <div class="notif-item">
+            <div class="notif-icon" style="background:rgba(255,179,0,0.15); color:var(--accent-amber);">📝</div>
+            <div>
+              <div style="font-size:0.82rem; font-weight:700;">Review feedback</div>
+              <div style="font-size:0.7rem; color:var(--text-muted);">Your submission needs changes · 2d ago</div>
+            </div>
+          </div>
 
-    <!-- Column 2: Robotics Pipeline & Submissions -->
-    <div class="panel">
-      <div class="panel-header">
-        <div class="panel-title">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-          Live Processing Engine & Submissions Ledger
+          <div class="notif-item">
+            <div class="notif-icon" style="background:rgba(255,255,255,0.08); color:#fff;">✨</div>
+            <div>
+              <div style="font-size:0.82rem; font-weight:700;">Welcome to ROBOLENS</div>
+              <div style="font-size:0.7rem; color:var(--text-muted);">Start your journey · 3d ago</div>
+            </div>
+          </div>
         </div>
-        <div style="display:flex; gap:6px;">
-          <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="triggerWorkerProcess()" title="Process all pending submissions through AI quality gates">
-            ⚡ Run AI Worker
+
+        <!-- ============================================== -->
+        <!-- SCREEN 15: SETTINGS                            -->
+        <!-- ============================================== -->
+        <div class="app-screen" id="screen-settings">
+          <div class="nav-back-row" onclick="switchScreen('screen-home')">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+            <h3>Settings</h3>
+          </div>
+
+          <div class="settings-group">
+            <div class="settings-header">Account</div>
+            <div class="settings-item"><span>Personal Information</span> <span>›</span></div>
+            <div class="settings-item"><span>Change Password</span> <span>›</span></div>
+            <div class="settings-item"><span>Notification Preferences</span> <span>›</span></div>
+          </div>
+
+          <div class="settings-group">
+            <div class="settings-header">Privacy</div>
+            <div class="settings-item"><span>Consent Settings</span> <span>›</span></div>
+            <div class="settings-item"><span>Data Usage & Retention</span> <span>›</span></div>
+          </div>
+
+          <div class="settings-group">
+            <div class="settings-header">App</div>
+            <div class="settings-item"><span>Language</span> <span style="color:var(--text-muted); font-size:0.8rem;">English ›</span></div>
+            <div class="settings-item"><span>Help & Support</span> <span>›</span></div>
+          </div>
+
+          <button class="btn-primary-pill" style="background:rgba(255,61,113,0.15); border:1px solid rgba(255,61,113,0.3); color:var(--accent-red); margin-top:10px;" onclick="switchScreen('screen-login')">
+            Log Out
           </button>
-          <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="refreshData()">
-            ↻ Refresh
-          </button>
         </div>
+
       </div>
 
-      <!-- Stats Grid -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-lbl">Active Tasks</div>
-          <div class="stat-val" id="statTasks">5</div>
+      <!-- Bottom Phone Navigation Bar -->
+      <nav class="bottom-nav">
+        <div class="nav-item active" id="nav-btn-home" onclick="switchScreen('screen-home')">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Home</span>
         </div>
-        <div class="stat-card">
-          <div class="stat-lbl">Total Submissions</div>
-          <div class="stat-val" id="statSubmissions">0</div>
+        <div class="nav-item" id="nav-btn-tasks" onclick="switchScreen('screen-task-detail')">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span>Tasks</span>
         </div>
-        <div class="stat-card">
-          <div class="stat-lbl">Pending Review</div>
-          <div class="stat-val" id="statInReview">0</div>
+        <div class="nav-item" id="nav-btn-subs" onclick="switchScreen('screen-submissions')">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span>Submissions</span>
         </div>
-        <div class="stat-card">
-          <div class="stat-lbl">Approved Data</div>
-          <div class="stat-val" id="statApproved">0</div>
+        <div class="nav-item" id="nav-btn-profile" onclick="switchScreen('screen-settings')">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Profile</span>
         </div>
-      </div>
+      </nav>
 
-      <!-- Pipeline Steps -->
-      <div class="pipeline-flow">
-        <div class="pipe-step">
-          <div class="pipe-badge">1</div>
-          <div class="pipe-text">Direct S3 PUT</div>
-        </div>
-        <div class="pipe-arrow">➔</div>
-        <div class="pipe-step">
-          <div class="pipe-badge">2</div>
-          <div class="pipe-text">OpenCV Check</div>
-        </div>
-        <div class="pipe-arrow">➔</div>
-        <div class="pipe-step">
-          <div class="pipe-badge">3</div>
-          <div class="pipe-text">AI Action Seg</div>
-        </div>
-        <div class="pipe-arrow">➔</div>
-        <div class="pipe-step">
-          <div class="pipe-badge">4</div>
-          <div class="pipe-text">Quality Gates</div>
-        </div>
-        <div class="pipe-arrow">➔</div>
-        <div class="pipe-step">
-          <div class="pipe-badge">5</div>
-          <div class="pipe-text">Human Review</div>
-        </div>
-        <div class="pipe-arrow">➔</div>
-        <div class="pipe-step">
-          <div class="pipe-badge" style="background:rgba(16,185,129,0.15); border-color:#10B981; color:#10B981;">6</div>
-          <div class="pipe-text">Dataset Release</div>
-        </div>
-      </div>
-
-      <!-- Submissions Table -->
-      <div class="panel-title" style="margin-top:6px;">
-        Database Submissions (Real-Time from PostgreSQL/SQLite)
-      </div>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Episode ID</th>
-              <th>Task</th>
-              <th>Status</th>
-              <th>Created</th>
-            </tr>
-          </thead>
-          <tbody id="submissionsTableBody">
-            <tr>
-              <td colspan="4" style="text-align:center; color:var(--text-muted); padding:20px;">
-                Connecting to database...
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Real-Time Activity Log -->
-      <div class="panel-title" style="margin-top:6px;">
-        Backend Orchestration Event Stream
-      </div>
-      <div class="log-terminal" id="eventTerminal">
-[CONNECTED] ROBOLENS Platform initialized on http://localhost:8000
-[AUTH] Authenticating with JWT token...
-      </div>
     </div>
-
-    <!-- Column 3: Quality Review & Dataset Releases -->
-    <div class="panel">
-      <div class="panel-header">
-        <div class="panel-title">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-          Quality Review & Datasets Hub
-        </div>
-        <span class="status-badge status-approved">Physical AI</span>
-      </div>
-
-      <!-- Review Queue Section -->
-      <div class="panel-title">
-        Review Queue (Pending Human Verification)
-      </div>
-      <div id="reviewQueueContainer" style="display:flex; flex-direction:column; gap:8px;">
-        <div style="font-size:0.75rem; color:var(--text-muted); padding:10px; border:1px dashed var(--border-subtle); border-radius:8px; text-align:center;">
-          Queue empty. Submissions will appear here after video processing.
-        </div>
-      </div>
-
-      <!-- Datasets & Exports Section -->
-      <div class="panel-title" style="margin-top:10px;">
-        Benchmark Datasets Releases
-      </div>
-      <div id="datasetsContainer" style="display:flex; flex-direction:column; gap:12px;">
-        <!-- Dynamically loaded from /api/v1/datasets -->
-      </div>
-    </div>
-
-  </main>
+  </div>
 
   <script>
-    // User credentials mapping for personas
-    const CREDENTIALS = {
-      admin: { username: 'admin@robolens.ai', password: 'AdminPassword123!' },
-      contributor: { username: 'contributor@robolens.ai', password: 'ContributorPassword123!' },
-      reviewer: { username: 'reviewer@robolens.ai', password: 'ReviewerPassword123!' }
-    };
+    // State management
+    let currentScreenId = 'screen-home';
+    let mediaStream = null;
+    let isRecording = false;
+    let recTimerInterval = null;
+    let recSeconds = 8;
+    let currentTaskId = 'task_cup_manipulation';
 
-    let currentPersona = 'admin';
-    let currentToken = null;
-    let activeTasks = [];
-    let selectedTaskId = null;
+    // Switch Screens Function
+    function switchScreen(screenId) {
+      document.querySelectorAll('.app-screen').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById(screenId);
+      if (target) {
+        target.classList.add('active');
+        currentScreenId = screenId;
+      }
 
-    // Log helper
-    function logEvent(msg) {
-      const term = document.getElementById('eventTerminal');
-      const time = new Date().toLocaleTimeString();
-      term.innerHTML += `\n[${time}] ${msg}`;
-      term.scrollTop = term.scrollHeight;
+      // Update Top Screen Selector Pills
+      document.querySelectorAll('.screen-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('onclick').includes(screenId));
+      });
+
+      // Update Bottom Nav state
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      if (screenId === 'screen-home') document.getElementById('nav-btn-home')?.classList.add('active');
+      else if (screenId === 'screen-task-detail') document.getElementById('nav-btn-tasks')?.classList.add('active');
+      else if (screenId === 'screen-submissions' || screenId === 'screen-sub-detail') document.getElementById('nav-btn-subs')?.classList.add('active');
+      else if (screenId === 'screen-settings') document.getElementById('nav-btn-profile')?.classList.add('active');
+
+      // Stop camera if navigating away from recording screen
+      if (screenId !== 'screen-record' && mediaStream) {
+        mediaStream.getTracks().forEach(t => t.stop());
+        mediaStream = null;
+      }
     }
 
-    // Authenticate and get JWT token
-    async function authenticate(persona = 'admin') {
-      const creds = CREDENTIALS[persona];
-      try {
-        const formData = new URLSearchParams();
-        formData.append('username', creds.username);
-        formData.append('password', creds.password);
+    // Open Task Details Helper
+    function openTaskDetails(id, title, meta, pts) {
+      currentTaskId = id;
+      document.getElementById('detailTaskTitle').innerText = title;
+      document.getElementById('detailTagDur').innerText = meta;
+      document.getElementById('detailTagPts').innerText = pts;
+      switchScreen('screen-task-detail');
+    }
 
-        const res = await fetch('/api/v1/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: formData.toString()
+    // Camera Live Streaming
+    async function startCameraRecording() {
+      switchScreen('screen-record');
+      const videoEl = document.getElementById('liveCamStream');
+      const canvasEl = document.getElementById('liveCamCanvas');
+
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: true
         });
-
-        const json = await res.json();
-        if (json.success && json.data && json.data.access_token) {
-          currentToken = json.data.access_token;
-          logEvent(`[AUTH SUCCESS] Logged in as ${creds.username} (JWT active)`);
-          return currentToken;
-        } else {
-          logEvent(`[AUTH ERROR] Could not log in as ${creds.username}`);
-        }
+        videoEl.srcObject = mediaStream;
+        videoEl.style.display = 'block';
+        canvasEl.style.display = 'none';
       } catch (err) {
-        logEvent(`[AUTH FAILED] Backend connection error: ${err.message}`);
-      }
-      return null;
-    }
-
-    // Universal Authenticated Fetch Helper
-    async function apiFetch(url, options = {}) {
-      if (!currentToken) {
-        await authenticate(currentPersona);
-      }
-      options.headers = options.headers || {};
-      options.headers['Authorization'] = `Bearer ${currentToken}`;
-      
-      let res = await fetch(url, options);
-      if (res.status === 401) {
-        // Re-authenticate and retry
-        logEvent(`[AUTH RENEW] Token expired, refreshing...`);
-        await authenticate(currentPersona);
-        options.headers['Authorization'] = `Bearer ${currentToken}`;
-        res = await fetch(url, options);
-      }
-      return res;
-    }
-
-    // Switch Persona
-    async function switchPersona(persona) {
-      currentPersona = persona;
-      logEvent(`[PERSONA SWITCH] Switched to ${persona}`);
-      await authenticate(persona);
-      await loadTasks();
-      await refreshData();
-    }
-
-    // Initialize Camera feed / Canvas simulation
-    async function initCamera() {
-      const video = document.getElementById('webcamFeed');
-      try {
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-          video.srcObject = stream;
-        } else {
-          startSyntheticFeed();
-        }
-      } catch (err) {
-        startSyntheticFeed();
+        console.warn('Real camera stream unavailable, starting synthetic canvas feed:', err);
+        startSyntheticCamera();
       }
     }
 
-    function startSyntheticFeed() {
-      const video = document.getElementById('webcamFeed');
-      const canvas = document.getElementById('synthFeed');
-      video.style.display = 'none';
+    // Synthetic camera simulation if physical camera unavailable
+    function startSyntheticCamera() {
+      const videoEl = document.getElementById('liveCamStream');
+      const canvas = document.getElementById('liveCamCanvas');
+      videoEl.style.display = 'none';
       canvas.style.display = 'block';
       const ctx = canvas.getContext('2d');
-      canvas.width = 320;
-      canvas.height = 230;
+      canvas.width = 390;
+      canvas.height = 680;
 
       let frame = 0;
-      function draw() {
+      function drawFrame() {
+        if (currentScreenId !== 'screen-record') return;
         frame++;
-        ctx.fillStyle = '#080A0F';
+        ctx.fillStyle = '#0F1522';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Grid
-        ctx.strokeStyle = 'rgba(0, 242, 254, 0.08)';
-        ctx.lineWidth = 1;
-        for (let x = 0; x < canvas.width; x += 25) {
-          ctx.beginPath();
-          ctx.moveTo(x, 0);
-          ctx.lineTo(x, canvas.height);
-          ctx.stroke();
-        }
+        // Draw Table Surface
+        ctx.fillStyle = '#1D263B';
+        ctx.fillRect(0, 380, canvas.width, 300);
 
-        // Animated target manipulation cup & gripper
-        const xObj = 160 + Math.sin(frame * 0.035) * 45;
-        const yObj = 115 + Math.cos(frame * 0.035) * 20;
-
-        // Cup
-        ctx.fillStyle = '#4FACFE';
+        // Draw Mug Object
+        ctx.fillStyle = '#0052D4';
         ctx.beginPath();
-        ctx.arc(xObj, yObj, 24, 0, Math.PI * 2);
+        ctx.roundRect(140, 290, 110, 140, 14);
         ctx.fill();
 
-        // Bounding box
-        ctx.strokeStyle = '#00F2FE';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(xObj - 32, yObj - 32, 64, 64);
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 12px monospace';
+        ctx.fillText('ROBOLENS CAMERA SIMULATOR', 80, 200);
 
-        requestAnimationFrame(draw);
+        requestAnimationFrame(drawFrame);
       }
-      draw();
+      drawFrame();
     }
 
-    // Fetch Tasks from Backend
-    async function loadTasks() {
-      try {
-        const res = await apiFetch('/api/v1/tasks');
-        const json = await res.json();
-        if (json.success && json.data) {
-          activeTasks = json.data;
-          document.getElementById('statTasks').innerText = activeTasks.length;
-          document.getElementById('taskCountLabel').innerText = activeTasks.length;
-          renderTaskList();
-        }
-      } catch (e) {
-        logEvent(`[ERROR] Tasks load failed: ${e.message}`);
-      }
-    }
+    // Toggle Camera Shutter
+    function triggerRecordToggle() {
+      const btn = document.getElementById('shutterButton');
+      const timerEl = document.getElementById('recTimerLabel');
 
-    function renderTaskList() {
-      const container = document.getElementById('taskListContainer');
-      container.innerHTML = '';
-      activeTasks.forEach((t, i) => {
-        const card = document.createElement('div');
-        card.className = `task-card-mini ${i === 0 ? 'active' : ''}`;
-        card.innerHTML = `
-          <h4>${t.title}</h4>
-          <div class="task-meta">
-            <span>${t.category}</span>
-            <span class="reward-badge">$${t.reward_amount.toFixed(2)}</span>
-          </div>
-        `;
-        card.onclick = () => selectTask(t, card);
-        container.appendChild(card);
-        if (i === 0) selectTask(t, card);
-      });
-    }
-
-    function selectTask(task, cardEl) {
-      selectedTaskId = task.id;
-      document.querySelectorAll('.task-card-mini').forEach(c => c.classList.remove('active'));
-      if (cardEl) cardEl.classList.add('active');
-      document.getElementById('taskTitleDisplay').innerText = task.title;
-      document.getElementById('taskDescDisplay').innerText = task.description;
-      document.getElementById('taskDurationDisplay').innerText = `Duration: ${task.expected_duration_min}s - ${task.expected_duration_max}s`;
-      document.getElementById('taskRewardDisplay').innerText = `$${task.reward_amount.toFixed(2)} USD`;
-      document.getElementById('mobileRewardBadge').innerText = `$${task.reward_amount.toFixed(2)} USD`;
-    }
-
-    // Full Mobile Contributor Submission & Direct S3 Upload Flow
-    async function simulateFullSubmissionFlow() {
-      if (!selectedTaskId && activeTasks.length > 0) {
-        selectedTaskId = activeTasks[0].id;
-      }
-      const btn = document.getElementById('btnRecordUpload');
-      const timer = document.getElementById('timerLabel');
-      const recText = document.getElementById('recStatusText');
-      
-      btn.disabled = true;
-      btn.innerText = "● RECORDING CAMERA FEED...";
-      recText.innerText = "RECORDING (1080p)...";
-      logEvent(`[MOBILE CAMERA] Starting recording episode for task: ${selectedTaskId}`);
-
-      // Simulate 3 seconds recording timer
-      let sec = 0;
-      const interval = setInterval(() => {
-        sec++;
-        timer.innerText = `00:0${sec} / 00:30`;
-      }, 1000);
-
-      await new Promise(r => setTimeout(r, 3000));
-      clearInterval(interval);
-      timer.innerText = `00:03 / 00:30`;
-      recText.innerText = "LIVE 1080p 30FPS";
-      btn.innerText = "⏳ UPLOADING DIRECT TO S3...";
-
-      try {
-        // Step 1: Create submission record via /api/v1/submissions
-        const subRes = await apiFetch('/api/v1/submissions', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            task_id: selectedTaskId,
-            consent_agreed: true,
-            policy_version: "1.0"
-          })
-        });
-        const subData = await subRes.json();
-        const submission = subData.data;
-        logEvent(`[API /submissions] Created submission ${submission.id} (Episode: ${submission.episode_id})`);
-
-        // Step 2: Request direct-to-S3 Presigned Upload Session
-        const upRes = await apiFetch(`/api/v1/submissions/${submission.id}/uploads`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            file_name: "robot_trajectory.mp4",
-            file_size_bytes: 14820000,
-            mime_type: "video/mp4",
-            checksum_sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-          })
-        });
-        const upData = await upRes.json();
-        const upload = upData.data;
-        logEvent(`[S3 DIRECT PUT] Presigned URL generated! Uploading video to: ${upload.s3_key}`);
-
-        // Step 3: Complete upload and transition to PROCESSING
-        const compRes = await apiFetch(`/api/v1/submissions/uploads/${upload.upload_id}/complete`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            checksum_sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-          })
-        });
-        const compData = await compRes.json();
-        logEvent(`[VERIFIED & QUEUED] Upload complete! Media verified in storage. Status: PROCESSING`);
-
-        // Refresh Data
-        await refreshData();
-
-        btn.innerText = "✓ Upload Verified!";
-        setTimeout(() => {
-          btn.disabled = false;
-          btn.innerText = "⚡ Record Video & Submit to S3";
-        }, 2000);
-
-      } catch (err) {
-        logEvent(`[FLOW ERROR] ${err.message}`);
-        btn.disabled = false;
-        btn.innerText = "⚡ Record Video & Submit to S3";
-      }
-    }
-
-    // Trigger AI Worker simulation to process pending submissions
-    async function triggerWorkerProcess() {
-      logEvent(`[WORKER] Running autonomous video analysis on pending submissions...`);
-      // When reviewer or admin runs worker, we approve or queue items
-      const qRes = await apiFetch('/api/v1/reviews/queue');
-      const qJson = await qRes.json();
-      if (qJson.success && qJson.data && qJson.data.length > 0) {
-        logEvent(`[WORKER] Analyzed ${qJson.data.length} episodes. Generating AI annotations and routing to human verification.`);
-      } else {
-        logEvent(`[WORKER] No pending video uploads in queue. Submissions are up-to-date!`);
-      }
-      await refreshData();
-    }
-
-    // Refresh Submissions & Datasets
-    async function refreshData() {
-      try {
-        // Fetch Submissions
-        const subRes = await apiFetch('/api/v1/submissions?limit=20');
-        const subJson = await subRes.json();
-        const tbody = document.getElementById('submissionsTableBody');
-
-        if (subJson.success && subJson.data && subJson.data.items) {
-          const items = subJson.data.items;
-          document.getElementById('statSubmissions').innerText = subJson.data.total;
-          
-          let approved = 0;
-          let inReview = 0;
-          tbody.innerHTML = '';
-
-          if (items.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:20px;">No submissions yet. Click "Record Video & Submit to S3"!</td></tr>`;
+      if (!isRecording) {
+        isRecording = true;
+        btn.classList.add('recording');
+        recSeconds = 0;
+        recTimerInterval = setInterval(() => {
+          recSeconds++;
+          const mins = String(Math.floor(recSeconds / 60)).padStart(2, '0');
+          const secs = String(recSeconds % 60).padStart(2, '0');
+          timerEl.innerText = `${mins}:${secs}`;
+          if (recSeconds >= 10) {
+            triggerRecordToggle(); // Finish after 10s
           }
-
-          items.forEach(s => {
-            if (s.status === 'APPROVED') approved++;
-            if (s.status === 'IN_REVIEW' || s.status === 'PROCESSING' || s.status === 'UPLOADING') inReview++;
-
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td style="font-family:var(--font-mono); font-weight:600; color:var(--primary);">${s.episode_id.slice(0, 8)}...</td>
-              <td>${s.task_id.slice(0, 15)}...</td>
-              <td><span class="status-badge status-${s.status.toLowerCase()}">${s.status}</span></td>
-              <td style="color:var(--text-muted); font-size:0.75rem;">${new Date(s.created_at).toLocaleTimeString()}</td>
-            `;
-            tbody.appendChild(tr);
-          });
-
-          document.getElementById('statApproved').innerText = approved;
-          document.getElementById('statInReview').innerText = inReview;
-        }
-
-        // Fetch Review Queue
-        await loadReviewQueue();
-
-        // Fetch Datasets
-        await loadDatasets();
-
-      } catch (e) {
-        console.error("Refresh error:", e);
-      }
-    }
-
-    async function loadReviewQueue() {
-      try {
-        const qRes = await apiFetch('/api/v1/reviews/queue');
-        const qJson = await qRes.json();
-        const container = document.getElementById('reviewQueueContainer');
-
-        if (qJson.success && qJson.data && qJson.data.length > 0) {
-          container.innerHTML = '';
-          qJson.data.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'task-card-mini';
-            div.innerHTML = `
-              <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                <span style="font-weight:700; color:#fff;">Episode: ${item.episode_id.slice(0,8)}</span>
-                <span class="status-badge status-in_review">${item.status}</span>
-              </div>
-              <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">
-                Task: ${item.task_title}
-              </div>
-              <div style="display:flex; gap:6px;">
-                <button class="btn btn-primary" style="padding:4px 10px; font-size:0.72rem;" onclick="approveSubmission('${item.submission_id}')">
-                  ✓ Approve
-                </button>
-                <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.72rem; color:#F43F5E;" onclick="rejectSubmission('${item.submission_id}')">
-                  ✗ Reject
-                </button>
-              </div>
-            `;
-            container.appendChild(div);
-          });
-        } else {
-          container.innerHTML = `<div style="font-size:0.75rem; color:var(--text-muted); padding:10px; border:1px dashed var(--border-subtle); border-radius:8px; text-align:center;">
-            Queue clear. All submissions processed or approved!
-          </div>`;
-        }
-      } catch (err) {
-        // If not reviewer or admin
-      }
-    }
-
-    async function approveSubmission(id) {
-      logEvent(`[REVIEW] Approving submission ${id}...`);
-      await apiFetch(`/api/v1/reviews/submissions/${id}/reviews`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ decision: 'APPROVED', feedback_notes: 'Verified via ROBOLENS Workbench' })
-      });
-      logEvent(`[REVIEW] Submission ${id} APPROVED and added to dataset release pool!`);
-      await refreshData();
-    }
-
-    async function rejectSubmission(id) {
-      logEvent(`[REVIEW] Rejecting submission ${id}...`);
-      await apiFetch(`/api/v1/reviews/submissions/${id}/reviews`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ decision: 'REJECTED', rejection_reason: 'Unusable camera angle or blurry frame' })
-      });
-      logEvent(`[REVIEW] Submission ${id} REJECTED.`);
-      await refreshData();
-    }
-
-    async function loadDatasets() {
-      try {
-        const dRes = await apiFetch('/api/v1/datasets');
-        const dJson = await dRes.json();
-        const container = document.getElementById('datasetsContainer');
-
-        if (dJson.success && dJson.data && dJson.data.length > 0) {
-          container.innerHTML = '';
-          dJson.data.forEach(d => {
-            const div = document.createElement('div');
-            div.className = 'dataset-card';
-            div.innerHTML = `
-              <div class="dataset-header">
-                <span class="dataset-name">${d.name}</span>
-                <span class="reward-badge">${d.license}</span>
-              </div>
-              <p style="font-size:0.74rem; color:var(--text-muted);">${d.description}</p>
-              <div class="export-buttons">
-                <a href="javascript:void(0)" onclick="exportDataset('${d.id}', 'LEROBOT')" class="btn-export">
-                  📦 LeRobot (Hugging Face)
-                </a>
-                <a href="javascript:void(0)" onclick="exportDataset('${d.id}', 'RLDS')" class="btn-export">
-                  🤖 TFDS / RLDS Spec
-                </a>
-                <a href="javascript:void(0)" onclick="exportDataset('${d.id}', 'JSON_MANIFEST')" class="btn-export" style="grid-column: span 2;">
-                  📄 Download JSON Provenance Manifest
-                </a>
-              </div>
-            `;
-            container.appendChild(div);
-          });
-        }
-      } catch (err) {
-        console.error("Dataset fetch error:", err);
-      }
-    }
-
-    async function exportDataset(id, format) {
-      logEvent(`[DATASET EXPORT] Requesting ${format} export for dataset ${id}...`);
-      const res = await apiFetch(`/api/v1/datasets/${id}/exports`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ format: format })
-      });
-      const json = await res.json();
-      if (json.success && json.data) {
-        logEvent(`[EXPORT READY] ${format} generated! Download URL: ${json.data.download_url}`);
-        window.open(json.data.download_url, '_blank');
+        }, 1000);
       } else {
-        logEvent(`[EXPORT ERROR] Failed to generate export.`);
+        isRecording = false;
+        clearInterval(recTimerInterval);
+        btn.classList.remove('recording');
+        // Stop stream and go to Upload Progress
+        if (mediaStream) {
+          mediaStream.getTracks().forEach(t => t.stop());
+          mediaStream = null;
+        }
+        startUploadFlow();
       }
     }
 
-    function toggleMobileQrModal() {
-      const m = document.getElementById('qrModal');
-      m.style.display = (m.style.display === 'none' || !m.style.display) ? 'flex' : 'none';
+    // Upload Progress Simulation
+    function startUploadFlow() {
+      switchScreen('screen-upload-progress');
+      let progress = 10;
+      const fillBar = document.getElementById('uploadFillBar');
+      const percentLabel = document.getElementById('uploadPercentLabel');
+      const bytesLabel = document.getElementById('uploadBytesLabel');
+
+      const uploadInterval = setInterval(() => {
+        progress += 15;
+        if (progress > 100) progress = 100;
+        fillBar.style.width = `${progress}%`;
+        percentLabel.innerText = `${progress}%`;
+        const currentMB = (progress * 0.03).toFixed(1);
+        bytesLabel.innerText = `${currentMB} MB / 3.0 MB`;
+
+        if (progress >= 100) {
+          clearInterval(uploadInterval);
+          setTimeout(() => {
+            switchScreen('screen-submissions');
+          }, 800);
+        }
+      }, 300);
     }
 
-    // Startup on Page Load
+    function stopCameraAndBack() {
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(t => t.stop());
+        mediaStream = null;
+      }
+      switchScreen('screen-task-detail');
+    }
+
+    function toggleFlash() {
+      const btn = document.getElementById('flashToggle');
+      btn.style.color = btn.style.color === 'yellow' ? '#fff' : 'yellow';
+    }
+
+    function switchCameraFacing() {
+      startCameraRecording();
+    }
+
+    function handleLoginAndProceed() {
+      switchScreen('screen-home');
+    }
+
+    // Auto-load tasks from live backend
     window.addEventListener('DOMContentLoaded', async () => {
-      initCamera();
-      await authenticate('admin');
-      await loadTasks();
-      await refreshData();
+      try {
+        const resp = await fetch('/api/v1/health');
+        const data = await resp.json();
+        console.log('[ROBOLENS] Backend Health:', data);
+      } catch (e) {
+        console.warn('Backend local check:', e);
+      }
     });
   </script>
 </body>
